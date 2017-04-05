@@ -153,15 +153,22 @@ bool isAlive()
     }
 void CalculateStats()
     {
+    if (HP>MaxHP){HP=MaxHP;}
+    if(MP>MaxMp){MP=MaxMp;}
     int delta=(int)((double)Body*1.05+(double)Soul*0.20)+HPmods-MaxHP;
     cout<<delta<<endl;
-    MaxHP=+delta;
+    cout<<MaxHP<<"/"<<HP<<endl;
+    MaxHP+=delta;
+    cout<<MaxHP<<"/"<<HP<<endl;
+    cout<<MaxHP<<endl;
     HP+=delta;
     delta=(int)((double)Soul*1.05+(double)Body*0.15+(double)Mind*0.05)+MPmods-MaxMp;
+    cout<<delta<<endl;
     MaxMp+=delta;
     MP+=delta;
     if (HP>MaxHP){HP=MaxHP;}
     if(MP>MaxMp){MP=MaxMp;}
+    cout<<HP<<" "<<MP<<endl;
     Attack=(int)((double)Body*0.95+(double)Mind*0.125+(double)Soul*0.075)+atkmods;
     Defence=(int)((double)Body*1.05+(double)Mind*0.05+(double)Soul*0.05)+defmods;
     DMGmods=uzbrojenie.bazDMG+Body*uzbrojenie.BodyDMGmod+Soul*uzbrojenie.SoulDMGmod+Mind*uzbrojenie.MindDMGmod;
@@ -807,7 +814,7 @@ switch ((int)a)
     case 'r':
     case 'R':{cout<<"you rest for a while..."<<endl;
            this_thread::sleep_for(chrono::milliseconds(600));
-           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; Hero->CalculateStats();}
+           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; cout<<Hero->HP<<"/"<<Hero->MaxHP<<endl; Hero->CalculateStats();}
            else{cout<<"You have been attacked while you were resting!"<<endl;
            Spawn();
            }
