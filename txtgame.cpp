@@ -1,3 +1,4 @@
+#include<cctype>
 #include <iostream>
 #include<fstream>
 #include<thread>
@@ -17,20 +18,23 @@ string a;
 getline(cin,a);
 int liczba=0;
 if(a[0]=='-'){neg=true;a[0]='0';}
-else if(a[0]!='1' and a[0]!='2' and a[0]!='3' and a[0]!='4' and a[0]!='5' and a[0]!='6' and a[0]!='7' and a[0]!='8' and a[0]!='9' and a[0]!='0' and a[0]!='-')
+else if(!isdigit(a[0]) and a[0]!='-')   //if(a[0]!='1' and a[0]!='2' and a[0]!='3' and a[0]!='4' and a[0]!='5' and a[0]!='6' and a[0]!='7' and a[0]!='8' and a[0]!='9' and a[0]!='0' and a[0]!='-')
     {
     cout<<"Something went wrong, try again:"<<endl;
     a="";
+    cin.clear();
+    cin.ignore(1000,'\n');
     getline(cin,a);
     }
 for (int i=0;i<a.length();i++)
     {
-    if(a[a.length()-i]!=1 and a[a.length()-i]!=2 and a[a.length()-i]!=3 and a[a.length()-i]!=4 and a[a.length()-i]!=5 and a[a.length()-i]!=6 and a[a.length()-i]!=7 and a[a.length()-i]!=8 and a[a.length()-i]!=9 and a[a.length()-i]!=0)
+   // cout<<a[a.length()-(i+1)]<<endl<<endl;
+    if(!isdigit(a[a.length()-(i+1)])) //a[a.length()-(i+1)]!=1 and a[a.length()-(i+1)]!=2 and a[a.length()-(i+1)]!=3 and a[a.length()-(i+1)]!=4 and a[a.length()-(i+1)]!=5 and a[a.length()-(i+1)]!=6 and a[a.length()-(i+1)]!=7 and a[a.length()-(i+1)]!=8 and a[a.length()-(i+1)]!=9 and a[a.length()-(i+1)]!=0)
         {
         cout<<"Invalid input, try again!"<<endl;
         neg=false;
         cin.clear();
-        cin.ignore(1000,'/n');
+        cin.ignore(1000,'\n');
         a="";
         inputint();
         break;
@@ -38,6 +42,7 @@ for (int i=0;i<a.length();i++)
     liczba+=((int)a[a.length()-(1+i)]-'0')*pow(10,i);
     }
 if(neg){liczba*=-1;}
+cout<<liczba<<endl<<endl;
 return liczba;
 }
 
@@ -148,14 +153,22 @@ bool isAlive()
     }
 void CalculateStats()
     {
+    if (HP>MaxHP){HP=MaxHP;}
+    if(MP>MaxMp){MP=MaxMp;}
     int delta=(int)((double)Body*1.05+(double)Soul*0.20)+HPmods-MaxHP;
-    MaxHP=+delta;
+    cout<<delta<<endl;
+    cout<<MaxHP<<"/"<<HP<<endl;
+    MaxHP+=delta;
+    cout<<MaxHP<<"/"<<HP<<endl;
+    cout<<MaxHP<<endl;
     HP+=delta;
     delta=(int)((double)Soul*1.05+(double)Body*0.15+(double)Mind*0.05)+MPmods-MaxMp;
+    cout<<delta<<endl;
     MaxMp+=delta;
     MP+=delta;
     if (HP>MaxHP){HP=MaxHP;}
     if(MP>MaxMp){MP=MaxMp;}
+    cout<<HP<<" "<<MP<<endl;
     Attack=(int)((double)Body*0.95+(double)Mind*0.125+(double)Soul*0.075)+atkmods;
     Defence=(int)((double)Body*1.05+(double)Mind*0.05+(double)Soul*0.05)+defmods;
     DMGmods=uzbrojenie.bazDMG+Body*uzbrojenie.BodyDMGmod+Soul*uzbrojenie.SoulDMGmod+Mind*uzbrojenie.MindDMGmod;
@@ -346,6 +359,7 @@ WALKA();
 
 void NewFloor()
 {
+mapa.clear();
 Level.clear();
 int rooms=0;
 if(NG)
@@ -561,11 +575,13 @@ else if (Level[Hero->isinRoom].hasSecret)
                         {
                         Hero->Energy+=rollD(LabyrinthFloor/3+rollD(killcount/10)+rollD(lockcount)+3);
                         cout<<"There was some Energy to collect..."<<endl;
+                        Level[Hero->isinRoom].hasSecret=false;
                         break;
                         }
                 case 3:{
                         cout<<"You found some Armour!"<<endl;
                         Hero->Armour+=1+LabyrinthFloor/5+killcount/25+Hero->Mind/73+Hero->Soul/3;
+                        Level[Hero->isinRoom].hasSecret=false;
                         break;
                         }
                 case 4:{
@@ -573,6 +589,7 @@ else if (Level[Hero->isinRoom].hasSecret)
                         Hero->HP+=Hero->MaxHP/3;
                         Hero->MP+=Hero->MaxMp/3;
                         Hero->CalculateStats();
+                        Level[Hero->isinRoom].hasSecret=false;
                         break;
                         }
                 case 7:{}
@@ -589,9 +606,9 @@ else if (Level[Hero->isinRoom].hasSecret)
                 case 'A':
                 case 'a':
                         {
-                        cout<<"You attack ";
                         if(Hero->uzbrojenie.lvl>=0)
                             {
+                            cout<<"You attack ";
                             switch(rollD(9))
                                 {
                                 case 1:Hero->uzbrojenie.bazProgress+=1;break;
@@ -603,8 +620,10 @@ else if (Level[Hero->isinRoom].hasSecret)
                                 case 7:Hero->uzbrojenie.BodyProgress+=1;break;
                                 case 9:Hero->Energy++;break;
                                 default: Hero->uzbrojenie.bazProgress++;break;
-                             }
+                                }
+                            Level[Hero->isinRoom].hasSecret=false;
                             cout<<"and see as the blob gets absorbed into your weapon"<<endl;
+                            Level[Hero->isinRoom].hasSecret=false;
                             break;
                             }
                         }
@@ -625,12 +644,21 @@ else if (Level[Hero->isinRoom].hasSecret)
                             case 17:{Hero->Mind++;break;}
                             default: {Hero->Energy+=2*rollD(LabyrinthFloor/1.375);break;}
                             }
+                        Level[Hero->isinRoom].hasSecret=false;
+                        cout<<"It sinks into you... but you don't feel anythig wrong."<<endl;
+                        break;
                         }
-                default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));break;}
+                default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));
+                        Level[Hero->isinRoom].hasSecret=false;
+                        break;
+                        }
                 }}
                 default:Hero->Energy++;
+                Level[Hero->isinRoom].hasSecret=false;
+                break;
                 }
         }
+        else{cout<<"You saw something interesting, but You are incapable of aquiring whatever it is..."<<endl;}
     }
 }
 else {cout<<"No interestings finds..."<<endl;}
@@ -638,21 +666,20 @@ else {cout<<"No interestings finds..."<<endl;}
 
 void Relocate()
 {
-cout<<"You know how to get to rooms:"<<endl;
-for(int i=0;i<mapa.size();i++)
+
+cout<<"You are in the room "<<Hero->isinRoom<<" and you know how to get to rooms:"<<endl;
+for(int i=0,disp=0;i<mapa.size();i++)
     {
     if(mapa[i])
-        {cout<<i<<" ";}
-    if ((i+1)%10==0)
+        {cout<<i<<" ";disp++;}
+    if ((disp+1)%10==0)
         {cout<<endl;}
     }
 int go;
-while(true)
-    {
-    cin>>go;
-    if(cin.fail() or go>=Level.size()){cout<<"Nope, try again!"<<endl; cin.ignore(numeric_limits<streamsize>::max(), '\n');cin.clear(); continue;}
-    break;
-    }
+go=inputint();
+if (go==Hero->isinRoom){cout<<"You dedcided to stay..."<<endl;}
+else if(mapa[go]==false or go<0 or go>mapa.size()){cout<<"You can't be sure if such room even exists... so you stay where you are."<<endl;return;}
+else{
 cout<<"You set off..."<<endl;
 switch(rollD(20))
     {
@@ -699,6 +726,7 @@ if(Level[go].isSealed)
     }
 Hero->isinRoom==go;
 }
+}
 
 void Explore()
 {
@@ -737,13 +765,15 @@ if(Level[now].isSealed)
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
+    while (m<0 or m>Hero->MP){cout<<"Stop joking..."<<endl; m=0;m=inputint(); }
     if ((m*(Hero->Soul+(int)(Hero->Mind*0.1)+(int)(Hero->Body*0.05)))>=Level[now].SealLevel)
         {
         lockcount++;
         Level[now].isSealed=false;
         cout<<"You broke through."<<endl;
+        Hero->MP-=m;
         }
-    else {Level[now].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))); cout<<"The barrier seems weakened..."<<endl;}
+    else {Level[now].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))); cout<<"The barrier seems weakened..."<<endl;Hero->MP-=m;}
     }
 Hero->isinRoom=now;
 }
@@ -784,7 +814,7 @@ switch ((int)a)
     case 'r':
     case 'R':{cout<<"you rest for a while..."<<endl;
            this_thread::sleep_for(chrono::milliseconds(600));
-           if(rollD(12)>4){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; Hero->CalculateStats();}
+           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; cout<<Hero->HP<<"/"<<Hero->MaxHP<<endl; Hero->CalculateStats();}
            else{cout<<"You have been attacked while you were resting!"<<endl;
            Spawn();
            }
