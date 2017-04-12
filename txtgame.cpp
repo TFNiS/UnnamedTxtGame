@@ -104,7 +104,7 @@ bool SecretKnown=false;
 void DiscoverSecret(){SecretKnown=true;}
 void MakeSecret()
     {
-    int secretlvl=rollD(3+LabyrinthFloor);
+    int secretlvl=1+rollD(LabyrinthFloor);
     SecretreqMind=1+rollD(secretlvl);
     secretlvl-=SecretreqMind;
     SecretreqBody=rollD(secretlvl);
@@ -301,7 +301,7 @@ while(Enemy->isAlive() and Hero->isAlive())
         case 'f':{
                 cout<<"You run for your petty life..."<<endl;
                 v=false;
-                Enemy->HP-=0;
+                Enemy->HP=0;
                 Enemy->isAlive();
                 break;
                 }
@@ -385,6 +385,7 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
+if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
 int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
@@ -634,7 +635,13 @@ else{
             }
         }
 
-}
+
+    else if(Level[Hero->isinRoom].Special==1)
+        {
+        cout<<"You approach a strange, altar-like... anvil? or maybe anvil-like altar..."<<endl;
+        Reforge();
+        }
+    }
 }
 
 void Search()
@@ -747,6 +754,8 @@ else if (Level[Hero->isinRoom].hasSecret)
     }
 }
 else {cout<<"No interestings finds..."<<endl;}
+cout<<"Besides, you see ";
+if(Level[Hero->isinRoom].Special==0){Cout<<"a drawing on the floor... it looks like some kind of a portal, but it laks power..."<<endl;}
 }
 
 void Relocate()
@@ -936,7 +945,8 @@ int main()
 {
 NG=true;
 cout<<"---------------------------------------------------------------------------------"<<endl;
-cout<<endl<<"---------------------------------------------------------------"<<endl<<"? → shows this"<<endl<<"a → attacks"<<endl<<"s → searches around"<<endl<<"i→ iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e → explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<"---------------------------------------------------------------"<<endl;
+cout<<endl<<"---------------------------------------------------------------"<<endl<<"? -> shows this"<<endl<<"a -> attacks"<<endl<<"s -> searches around"<<endl<<"i -> iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e -> explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<"---------------------------------------------------------------"<<endl;
+cout<<"**********************"<<endl<<"Pro Tips:"<<endl<<"most of the time answer beggining with letter 'D' (or 'd') can(and will) be lethal for you"<<endl<<"SEARCH EVERYTHING!"<<endl<<"Starting floor is a Tutorial of sorts..."<<endl<<"**********************"<<endl;
 Hero=new Creature();
 Enemy=new Creature();
 srand(time(NULL));
