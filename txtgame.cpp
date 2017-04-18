@@ -1,5 +1,5 @@
 #include<cctype>
-#include <iostream>
+#include<iostream>
 #include<fstream>
 #include<thread>
 #include<chrono>
