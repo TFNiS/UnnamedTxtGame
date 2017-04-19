@@ -105,8 +105,7 @@ void DiscoverSecret(){SecretKnown=true;}
 void MakeSecret()
     {
     int secretlvl=1+rollD(LabyrinthFloor);
-    SecretreqMind=1+rollD(secretlvl);
-    secretlvl-=SecretreqMind;
+    SecretreqMind=rollD(secretlvl);
     SecretreqBody=rollD(secretlvl);
     secretlvl-=SecretreqBody;
     SecretreqSoul=rollD(secretlvl);
@@ -167,7 +166,6 @@ void CalculateStats()
     Defence=(int)((double)Body*1.05+(double)Mind*0.05+(double)Soul*0.05)+defmods;
     DMGmods=uzbrojenie.bazDMG+Body*uzbrojenie.BodyDMGmod+Soul*uzbrojenie.SoulDMGmod+Mind*uzbrojenie.MindDMGmod;
     DMG=(int)((double)Body*0.05+(double)Mind*0.025+(double)Soul*0.025)+DMGmods;
-    cout<<DMG<<endl<<endl;
     }
 };
 
@@ -776,6 +774,138 @@ else{
         cout<<"You stand in front of a big floating blob of ransluscent liquid with multiple streaks of light inside it, and touch it."<<endl;
         Strenghten();
         }
+    else if(Level[Hero->isinRoom].Special==4)
+        {
+        cout<< "You approach the odd egg and try to touch it..."<<endl;
+        if(Hero->MP>1 and Hero->Energy>LabyrinthFloor)
+            {
+            Hero->MP--;
+            Hero->Energy-=LabyrinthFloor;
+            cout<<"But it shatters and an enemy appears from the inside!"<<endl;
+            if(Spawn())
+                {
+                cout<<"After defeating the enemy, the egg reforms itself."<<endl;
+                }
+            else{cout<<"You left the room, but the enemy disapeared when you looked back..."<<endl; Level[Hero->isinRoom].isOccupied=true;}
+            }
+        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacjed something but you are unshure what exsactly that 'Something' is."<<endl;}
+        }
+    else if (Level[Hero->isinRoom].Special==3)
+        {
+        cout<<"You approach the TREASURE CHEST..."<<endl;
+            switch(rollD(20))
+                {
+                case 1:{cout<<"But it's a trap!"<<endl<<"The enemy destroys the chest in which it was hiding and attacks you!"<<endl;
+                        Level[Hero->isinRoom].isOccupied=true;
+                        if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched th enemy"<<endl;}
+                        else{
+                            cout<<"You left the room!"<<endl;
+                            Hero->isinRoom=-1;
+                            }
+                        break;
+                        }
+                case 2:{
+                        int loot=rollD(5+rollD(2*LabyrinthFloor));
+                        cout<<"and find "<<loot<<"Energy inside"<<endl;
+                        Hero->Energy+=loot;
+                        break;
+                        }
+                case 13:{cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
+                default:{
+                        cout<<"It's locked!"<<endl;
+                        Level[Hero->isinRoom].LockLevel=1+rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+                        if((Hero->Mind+1+Hero->Soul/5+Hero->Body/15+Hero->Attack/25)<Level[Hero->isinRoom].LockLevel)
+                        {
+                        lockcount++;
+                        switch(rollD(13))
+                            {
+                            case 1:{
+                                    cout<<"The enemy jumps out of the chest... you just opened..."<<endl;
+                                    if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched the enemy"<<endl;}
+                                        else{
+                                            cout<<"You left the room!"<<endl;
+                                            Hero->isinRoom=-1;
+                                            }
+                                    break;
+                                    }
+                            case 12:
+                            case 2:{
+                                    int loot=2*rollD(5+rollD(2*LabyrinthFloor));
+                                    cout<<"and find "<<loot<<"Energy inside"<<endl;
+                                    Hero->Energy+=loot;
+                                    break;
+                                        }
+                            case 3:{
+                                    cout<<"As you open the chest, everything turns Red for a moment...";
+                                    Hero->HPmods+=rollD(3);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 4:{
+                                    cout<<"As you open the chest, everything turns Blue for a moment...";
+                                    Hero->MPmods+=rollD(3);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 5:{
+                                    cout<<"As you open the chest, everything turns White for a moment...";
+                                    Hero->atkmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 6:{
+                                    cout<<"As you open the chest, everything turns Black for a moment...";
+                                    Hero->defmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 7:{
+                                    cout<<"As you open the chest, everything turns Silver for a moment...";
+                                    Hero->DMGmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 8:{
+                                    cout<<"You find some armour!"<<endl;
+                                    Hero->Armour+=rollD(3+LabyrinthFloor);
+                                    break;
+                                    }
+                            case 9:{
+                                    cout<<"As you open the chest, everything turns Green for a moment...";
+                                    Hero->Mind++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 10:{
+                                    cout<<"As you open the chest, everything turns Cyan for a moment...";
+                                    Hero->Soul++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 11:{
+                                    cout<<"As you open the chest, everything turns Magenta for a moment...";
+                                    Hero->Body++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 13:{
+                                    cout<<"Guess what,"<<endl<<" IT'S EMPTY!"<<endl;
+                                    break;
+                                    }
+                            default:{
+                                    Hero->Energy++;
+                                    cout<<"Nothing interesting... π-π"<<endl;
+                                    break;
+                                    }
+                            }
+                        }
+                        else{cout<<"You are unable(too stupid) to break the lock without destroing the content"<<endl;break;}
+                        }
+                }
+            Hero->CalculateStats();
+        cout<<"It disappeared..."<<endl;
+
+        }
     }
 }
 
@@ -889,10 +1019,12 @@ else if (Level[Hero->isinRoom].hasSecret)
     }
 }
 else {cout<<"No interestings finds..."<<endl;}
-cout<<"Besides, you see ";
+cout<<"Also, you see ";
 if(Level[Hero->isinRoom].Special==0){cout<<"a drawing on the floor... it looks like some kind of a portal, but it lacks power..."<<endl;}
 else if (Level[Hero->isinRoom].Special==1){cout<<"an anvil-shaped altar, with images of severral weapons engraved onto it's surface... and it seems to emit a faint glow..."<<endl;}
 else if (Level[Hero->isinRoom].Special==2){cout<<"a rather big, floating transluscent blob of something, insisde you can se streaks of light? circling around"<<endl<<"you see black, white, red, blue, silver, green, cyan and magenta ones."<<endl;}
+else if (Level[Hero->isinRoom].Special==3){cout<<"a chest. A Treasure Chest."<<endl<<"THERE. IS. A. TREASURE. CHEST. IN. THE. ROOM!!!"<<endl;}
+else if (Level[Hero->isinRoom].Special==4){cout<<"a...n egg? perhaps... made of stone... and it looks as it would open up any moment now..."<<endl;}
 else {cout << "a rather mundane room, albeit the floor seems to be covered in a thin layer of fog"<<endl;}
 }
 
@@ -991,7 +1123,7 @@ switch(rollD(20))
     default: this_thread::sleep_for(chrono::milliseconds(250)); break;
     }
 int now=rollD(Level.size())-1;
-cout<<"You arrived at the enterance to a room...";
+cout<<"You came to the room "<<now<<" ";
 mapa[now]=true;
 if (Level[now].isLocked)
     {
