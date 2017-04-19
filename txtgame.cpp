@@ -1,3 +1,7 @@
+/**
+Game Made by: Tomasz Bronisław Rahn (aka Drejzer)
+as a project for TFNiS 2017
+**/
 #include<cctype>
 #include<iostream>
 #include<fstream>
