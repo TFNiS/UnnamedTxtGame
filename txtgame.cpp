@@ -1,5 +1,5 @@
 #include<cctype>
-#include <iostream>
+#include<iostream>
 #include<fstream>
 #include<thread>
 #include<chrono>
@@ -105,8 +105,7 @@ void DiscoverSecret(){SecretKnown=true;}
 void MakeSecret()
     {
     int secretlvl=1+rollD(LabyrinthFloor);
-    SecretreqMind=1+rollD(secretlvl);
-    secretlvl-=SecretreqMind;
+    SecretreqMind=rollD(secretlvl);
     SecretreqBody=rollD(secretlvl);
     secretlvl-=SecretreqBody;
     SecretreqSoul=rollD(secretlvl);
@@ -167,7 +166,6 @@ void CalculateStats()
     Defence=(int)((double)Body*1.05+(double)Mind*0.05+(double)Soul*0.05)+defmods;
     DMGmods=uzbrojenie.bazDMG+Body*uzbrojenie.BodyDMGmod+Soul*uzbrojenie.SoulDMGmod+Mind*uzbrojenie.MindDMGmod;
     DMG=(int)((double)Body*0.05+(double)Mind*0.025+(double)Soul*0.025)+DMGmods;
-    cout<<DMG<<endl<<endl;
     }
 };
 
@@ -445,8 +443,8 @@ Level[rooms].hasSecret=min(1,max(0,(-4+rollD(6))));
 Level[rooms].isOccupied=1;
 Level[rooms].isLocked=min(1,max(0,(-5+rollD(6))));
 Level[rooms].isSealed=1;
-Level[rooms].SealLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*LabyrinthFloor*rollD(LabyrinthFloor));
-Level[rooms].LockLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+Level[rooms].SealLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*rollD(LabyrinthFloor))+max(-1,66+LabyrinthFloor);
+Level[rooms].LockLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
 if (Level[rooms].hasSecret==true)
     {
     Level[rooms].MakeSecret();
@@ -477,131 +475,261 @@ for(k=0;k<4;k++)
 
 void Strenghten()
 {
-
+cout<<"Which streak of light caught your fancy?"<<endl;
+string choice;
+getline(cin,choice);
+if(choice.compare("Red")==0 or choice.compare("red")==0)
+    {
+    if(Hero->Energy>=Hero->traces+5)
+        {
+        Hero->Energy-=(5+Hero->traces);
+        Hero->HPmods++;
+        Hero->traces++;
+        Hero->CalculateStats();
+        cout<<"You feel... healthlier"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Blue")==0 or choice.compare("blue")==0)
+    {
+    if(Hero->Energy>=5+Hero->traces)
+        {
+        Hero->Energy-=(5+Hero->traces);
+        Hero->MPmods++;
+        Hero->traces++;
+        Hero->CalculateStats();
+        cout<<"You feel more energetic"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("White")==0 or choice.compare("white")==0)
+    {
+    if(Hero->Energy>=10+Hero->traces)
+        {
+        Hero->Energy-=(10+Hero->traces);
+        Hero->atkmods++;
+        Hero->traces+=10;
+        Hero->CalculateStats();
+        cout<<"You have a feeling that you will hit your targets more often"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Black")==0 or choice.compare("black")==0)
+    {
+    if(Hero->Energy>=10+Hero->traces)
+        {
+        Hero->Energy-=(10+Hero->traces);
+        Hero->defmods++;
+        Hero->traces+=10;
+        Hero->CalculateStats();
+        cout<<"You have a feeling that you won't get hit as much from now on"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Silver")==0 or choice.compare("silver")==0)
+    {
+    if(Hero->Energy>=15+Hero->traces)
+        {
+        Hero->Energy-=(15+Hero->traces);
+        Hero->DMGmods++;
+        Hero->traces+=15;
+        Hero->CalculateStats();
+        cout<<"You have a feeling that you will hit your targets harder"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Green")==0 or choice.compare("green")==0)
+    {
+    if(Hero->Energy>=25+Hero->traces)
+        {
+        Hero->Energy-=(25+Hero->traces);
+        Hero->Mind++;
+        Hero->traces+=30+LabyrinthFloor/2;
+        Hero->CalculateStats();
+        cout<<"You feel as if you mind cleared up..."<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Magenta")==0 or choice.compare("magenta")==0)
+    {
+    if(Hero->Energy>=25+Hero->traces)
+        {
+        Hero->Energy-=(25+Hero->traces);
+        Hero->Body++;
+        Hero->traces+=30+LabyrinthFloor/2;
+        Hero->CalculateStats();
+        cout<<"You feel as if your body became better overall"<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else if(choice.compare("Cyan")==0 or choice.compare("cyan")==0)
+    {
+    if(Hero->Energy>=25+Hero->traces)
+        {
+        Hero->Energy-=(25+Hero->traces);
+        Hero->Mind++;
+        Hero->traces+=25;
+        Hero->CalculateStats();
+        cout<<"You feel a mysterious force inside you..."<<endl;
+        }
+    else{cout<<"There was some reaction, but it seemed as if there was something lackig on your side..."<<endl;}
+    }
+else{cout<<"Hmm... nothing happens, so you step away."<<endl;}
 }
 
 void Reforge()
 {
-if(Hero->uzbrojenie.lvl==-1)
+string choice;
+cout<<"Weapon or Armour?"<<endl;
+getline(cin,choice);
+if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a' or choice[0]=='A')
     {
-    cout<<"You are unarmed! Find yourself a weapon before trying to upgrade it!"<<endl;
-    }
-else
-    {
-    if (Hero->uzbrojenie.lvl==0)
+    int quota;
+    cout<<"How much armour do you want?"<<endl<<"(FYI: armour requires about 15 Energy, and you have "<<Hero->Energy<<")"<<endl;
+    quota=inputint();
+    if(quota<=0){cout<<"You hanged your mind and stepped away from the anvil"<<endl; return;}
+    if (quota*15<Hero->Energy)
         {
-        string q;
-        cout<<"Do you want to bind your weapon?(only binded weapons can be upgraded)"<<endl;
-        getline(cin,q);
-        if(q.compare("Yes") or q.compare("yes") or q.compare("y") or q.compare("Y"))
-            {Hero->binding();}
+        this_thread::sleep_for(chrono::milliseconds(666));
+        cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
+        Hero->Energy-=quota*15-rollD(floor(quota/3-2));
+        return;
         }
-    if(Hero->uzbrojenie.BodyProgress!=0 and Hero->uzbrojenie.SoulProgress!=0 and Hero->uzbrojenie.MindProgress!=0 and Hero->uzbrojenie.bazProgress!=0 and Hero->uzbrojenie.lvl!=-1)
+    else if(quota*15-Hero->Energy<=Hero->MP)
         {
-        cout<<"Which aspect should be enchanced: Sharpness, Aura, Precision, or Foundation?"<<endl;
-        string q;
-        char c;
-        getline(cin,q);
-        c=(char)q[0];
-        switch((int)c)
+        this_thread::sleep_for(chrono::milliseconds(666));
+        cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
+        Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/3-2));
+        Hero->Energy=0;
+        return;
+        }
+    }
+else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(0)=='w' or choice.at(0)=='W')
+   {
+    if(Hero->uzbrojenie.lvl==-1)
+        {
+        cout<<"You are unarmed! Find yourself a weapon before trying to upgrade it!"<<endl;
+        return;
+        }
+    else
+        {
+        if (Hero->uzbrojenie.bound==0)
             {
-            case 'S':
-            case 's':{
-                    if(Hero->uzbrojenie.BodyProgress>=Hero->uzbrojenie.BodyDMGmod+(Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff))
-                        {
-                        Hero->uzbrojenie.BodyProgress-=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl);
-                        Hero->uzbrojenie.BodyDMGmod++;
-                        Hero->uzbrojenie.lvl++;
-                        this_thread::sleep_for(chrono::milliseconds(375));
-                        cout<<"Reforging succes!"<<endl;
-                        }
-                    if ((Hero->uzbrojenie.BodyProgress+Hero->Energy/4)>=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff) and Hero->uzbrojenie.BodyProgress<Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff)
-                        {
-                        cout<<"Do you wish to spend Energy?"<<endl;
-                        getline(cin,q);
-                        c=(char)q[0];
-                        if(c=='y' or c=='Y')
-                            {
-                            int calc=Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff;
-                            calc-=Hero->uzbrojenie.BodyProgress;
-                            Hero->Energy-=4*calc;
-                            Hero->uzbrojenie.BodyProgress=0;
-                            Hero->uzbrojenie.lvl++;
-                            Hero->uzbrojenie.BodyDMGmod++;
-                            }
-                        }
-                    break;
-                    }
-            case 'A':
-            case 'a':{
-                    if(Hero->uzbrojenie.SoulProgress>=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff)
-                        {
-                        Hero->uzbrojenie.SoulProgress-=(Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff);
-                        Hero->uzbrojenie.SoulDMGmod++;
-                        Hero->uzbrojenie.lvl++;
-                        this_thread::sleep_for(chrono::milliseconds(375));
-                        cout<<"Reforging succes!"<<endl;
-                        }
-                    if ((Hero->uzbrojenie.SoulProgress+Hero->Energy/4)>=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff and Hero->uzbrojenie.SoulProgress<Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff)
-                        {
-                        cout<<"Do you wish to spend Energy?"<<endl;
-                        getline(cin,q);
-                        c=(char)q[0];
-                        if(c=='y' or c=='Y')
-                            {
-                            int calc=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff;
-                            calc-=Hero->uzbrojenie.SoulProgress;
-                            Hero->Energy-=4*calc;
-                            Hero->uzbrojenie.SoulProgress=0;
-                            Hero->uzbrojenie.lvl++;
-                            Hero->uzbrojenie.SoulDMGmod++;
-                            }
-                        }
-                    break;
-                    }
-            case 'P':
-            case 'p':{
-                    if(Hero->uzbrojenie.MindProgress>=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff)
-                        {
-                        Hero->uzbrojenie.MindProgress-=(Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff);
-                        Hero->uzbrojenie.MindDMGmod++;
-                        Hero->uzbrojenie.lvl++;
-                        this_thread::sleep_for(chrono::milliseconds(375));
-                        cout<<"Reforging succes!"<<endl;
-                        }
-                    if ((Hero->uzbrojenie.MindProgress+Hero->Energy/4)>=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl and Hero->uzbrojenie.MindProgress<Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl)
-                        {
-                        cout<<"Do you wish to spend Energy?"<<endl;
-                        getline(cin,q);
-                        c=(char)q[0];
-                        if(c=='y' or c=='Y')
-                            {
-                            int calc=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff;
-                            calc-=Hero->uzbrojenie.MindProgress;
-                            Hero->Energy-=4*calc;
-                            Hero->uzbrojenie.MindProgress=0;
-                            Hero->uzbrojenie.lvl++;
-                            Hero->uzbrojenie.MindDMGmod++;
-                            }
-                        }
-                    break;
-                    }
-            case 'F':
-            case 'f':{
-                    while(Hero->uzbrojenie.bazProgress>=Hero->uzbrojenie.bazDMG*4+Hero->uzbrojenie.lvl)
-                        {
-                        Hero->uzbrojenie.bazProgress-=Hero->uzbrojenie.bazDMG*4+Hero->uzbrojenie.lvl;
-                        Hero->uzbrojenie.bazDMG++;
-                        this_thread::sleep_for(chrono::milliseconds(250));
-                        }
-                    cout<<"Done."<<endl;
-                    break;
-                    }
-            default: {break;}
+            string q;
+            cout<<"Do you want to bind your weapon?(only binded weapons can be upgraded)"<<endl;
+            getline(cin,q);
+            if(q.compare("Yes")==0 or q.compare("yes")==0 or q.compare("y")==0 or q.compare("Y")==0)
+                {Hero->binding();}
             }
+        if(Hero->uzbrojenie.BodyProgress!=0 and Hero->uzbrojenie.SoulProgress!=0 and Hero->uzbrojenie.MindProgress!=0 and Hero->uzbrojenie.bazProgress!=0 and Hero->uzbrojenie.lvl!=-1)
+            {
+            cout<<"Which aspect should be enchanced: Sharpness, Aura, Precision, or Foundation?"<<endl;
+            string q;
+            char c;
+            getline(cin,q);
+            c=(char)q[0];
+            switch((int)c)
+                {
+                case 'S':
+                case 's':{
+                        if(Hero->uzbrojenie.BodyProgress>=Hero->uzbrojenie.BodyDMGmod+(Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff))
+                            {
+                            Hero->uzbrojenie.BodyProgress-=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl);
+                            Hero->uzbrojenie.BodyDMGmod++;
+                            Hero->uzbrojenie.lvl++;
+                            this_thread::sleep_for(chrono::milliseconds(375));
+                            cout<<"Reforging succes!"<<endl;
+                            }
+                        if ((Hero->uzbrojenie.BodyProgress+Hero->Energy/4)>=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff) and Hero->uzbrojenie.BodyProgress<Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff)
+                            {
+                            cout<<"Do you wish to spend Energy?"<<endl;
+                            getline(cin,q);
+                            c=(char)q[0];
+                            if(c=='y' or c=='Y')
+                                {
+                                int calc=Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff;
+                                calc-=Hero->uzbrojenie.BodyProgress;
+                                Hero->Energy-=4*calc;
+                                Hero->uzbrojenie.BodyProgress=0;
+                                Hero->uzbrojenie.lvl++;
+                                Hero->uzbrojenie.BodyDMGmod++;
+                                }
+                            }
+                        break;
+                        }
+                case 'A':
+                case 'a':{
+                        if(Hero->uzbrojenie.SoulProgress>=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff)
+                            {
+                            Hero->uzbrojenie.SoulProgress-=(Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff);
+                            Hero->uzbrojenie.SoulDMGmod++;
+                            Hero->uzbrojenie.lvl++;
+                            this_thread::sleep_for(chrono::milliseconds(375));
+                            cout<<"Reforging succes!"<<endl;
+                            }
+                        if ((Hero->uzbrojenie.SoulProgress+Hero->Energy/4)>=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff and Hero->uzbrojenie.SoulProgress<Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff)
+                            {
+                            cout<<"Do you wish to spend Energy?"<<endl;
+                            getline(cin,q);
+                            c=(char)q[0];
+                            if(c=='y' or c=='Y')
+                                {
+                                int calc=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff;
+                                calc-=Hero->uzbrojenie.SoulProgress;
+                                Hero->Energy-=4*calc;
+                                Hero->uzbrojenie.SoulProgress=0;
+                                Hero->uzbrojenie.lvl++;
+                                Hero->uzbrojenie.SoulDMGmod++;
+                                }
+                            }
+                        break;
+                        }
+                case 'P':
+                case 'p':{
+                        if(Hero->uzbrojenie.MindProgress>=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff)
+                            {
+                            Hero->uzbrojenie.MindProgress-=(Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff);
+                            Hero->uzbrojenie.MindDMGmod++;
+                            Hero->uzbrojenie.lvl++;
+                            this_thread::sleep_for(chrono::milliseconds(375));
+                            cout<<"Reforging succes!"<<endl;
+                            }
+                        if ((Hero->uzbrojenie.MindProgress+Hero->Energy/4)>=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl and Hero->uzbrojenie.MindProgress<Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl)
+                            {
+                            cout<<"Do you wish to spend Energy?"<<endl;
+                            getline(cin,q);
+                            c=(char)q[0];
+                            if(c=='y' or c=='Y')
+                                {
+                                int calc=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff;
+                                calc-=Hero->uzbrojenie.MindProgress;
+                                Hero->Energy-=4*calc;
+                                Hero->uzbrojenie.MindProgress=0;
+                                Hero->uzbrojenie.lvl++;
+                                Hero->uzbrojenie.MindDMGmod++;
+                                }
+                            }
+                        break;
+                        }
+                case 'F':
+                case 'f':{
+                        while(Hero->uzbrojenie.bazProgress>=Hero->uzbrojenie.bazDMG*4+Hero->uzbrojenie.lvl)
+                            {
+                            Hero->uzbrojenie.bazProgress-=Hero->uzbrojenie.bazDMG*4+Hero->uzbrojenie.lvl;
+                            Hero->uzbrojenie.bazDMG++;
+                            this_thread::sleep_for(chrono::milliseconds(250));
+                            }
+                        cout<<"Done."<<endl;
+                        break;
+                        }
+                default: {break;}
+                }
+            }
+        cout<<"You are incapable of improving this weapon any further"<<endl;
+        return;
         }
-    cout<<"You are incapable of improving this weapon any further"<<endl;
     }
+else {cout<<"You changed your mind and step away"<<endl;return;}
 }
 
 void Interact()
@@ -638,8 +766,145 @@ else{
 
     else if(Level[Hero->isinRoom].Special==1)
         {
-        cout<<"You approach a strange, altar-like... anvil? or maybe anvil-like altar..."<<endl;
+        cout<<"You approach a strange, altar-like... anvil? Or maybe anvil-like altar..."<<endl;
         Reforge();
+        }
+    else if(Level[Hero->isinRoom].Special==2)
+        {
+        cout<<"You stand in front of a big floating blob of ransluscent liquid with multiple streaks of light inside it, and touch it."<<endl;
+        Strenghten();
+        }
+    else if(Level[Hero->isinRoom].Special==4)
+        {
+        cout<< "You approach the odd egg and try to touch it..."<<endl;
+        if(Hero->MP>1 and Hero->Energy>LabyrinthFloor)
+            {
+            Hero->MP--;
+            Hero->Energy-=LabyrinthFloor;
+            cout<<"But it shatters and an enemy appears from the inside!"<<endl;
+            if(Spawn())
+                {
+                cout<<"After defeating the enemy, the egg reforms itself."<<endl;
+                }
+            else{cout<<"You left the room, but the enemy disapeared when you looked back..."<<endl; Level[Hero->isinRoom].isOccupied=true;}
+            }
+        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacjed something but you are unshure what exsactly that 'Something' is."<<endl;}
+        }
+    else if (Level[Hero->isinRoom].Special==3)
+        {
+        cout<<"You approach the TREASURE CHEST..."<<endl;
+            switch(rollD(20))
+                {
+                case 1:{cout<<"But it's a trap!"<<endl<<"The enemy destroys the chest in which it was hiding and attacks you!"<<endl;
+                        Level[Hero->isinRoom].isOccupied=true;
+                        if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched th enemy"<<endl;}
+                        else{
+                            cout<<"You left the room!"<<endl;
+                            Hero->isinRoom=-1;
+                            }
+                        break;
+                        }
+                case 2:{
+                        int loot=rollD(5+rollD(2*LabyrinthFloor));
+                        cout<<"and find "<<loot<<"Energy inside"<<endl;
+                        Hero->Energy+=loot;
+                        break;
+                        }
+                case 13:{cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
+                default:{
+                        cout<<"It's locked!"<<endl;
+                        Level[Hero->isinRoom].LockLevel=1+rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+                        if((Hero->Mind+1+Hero->Soul/5+Hero->Body/15+Hero->Attack/25)<Level[Hero->isinRoom].LockLevel)
+                        {
+                        lockcount++;
+                        switch(rollD(13))
+                            {
+                            case 1:{
+                                    cout<<"The enemy jumps out of the chest... you just opened..."<<endl;
+                                    if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched the enemy"<<endl;}
+                                        else{
+                                            cout<<"You left the room!"<<endl;
+                                            Hero->isinRoom=-1;
+                                            }
+                                    break;
+                                    }
+                            case 12:
+                            case 2:{
+                                    int loot=2*rollD(5+rollD(2*LabyrinthFloor));
+                                    cout<<"and find "<<loot<<"Energy inside"<<endl;
+                                    Hero->Energy+=loot;
+                                    break;
+                                        }
+                            case 3:{
+                                    cout<<"As you open the chest, everything turns Red for a moment...";
+                                    Hero->HPmods+=rollD(3);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 4:{
+                                    cout<<"As you open the chest, everything turns Blue for a moment...";
+                                    Hero->MPmods+=rollD(3);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 5:{
+                                    cout<<"As you open the chest, everything turns White for a moment...";
+                                    Hero->atkmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 6:{
+                                    cout<<"As you open the chest, everything turns Black for a moment...";
+                                    Hero->defmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 7:{
+                                    cout<<"As you open the chest, everything turns Silver for a moment...";
+                                    Hero->DMGmods+=rollD(2);
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 8:{
+                                    cout<<"You find some armour!"<<endl;
+                                    Hero->Armour+=rollD(3+LabyrinthFloor);
+                                    break;
+                                    }
+                            case 9:{
+                                    cout<<"As you open the chest, everything turns Green for a moment...";
+                                    Hero->Mind++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 10:{
+                                    cout<<"As you open the chest, everything turns Cyan for a moment...";
+                                    Hero->Soul++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 11:{
+                                    cout<<"As you open the chest, everything turns Magenta for a moment...";
+                                    Hero->Body++;
+                                    cout<<" and you feel slighty different afterwards."<<endl;
+                                    break;
+                                    }
+                            case 13:{
+                                    cout<<"Guess what,"<<endl<<" IT'S EMPTY!"<<endl;
+                                    break;
+                                    }
+                            default:{
+                                    Hero->Energy++;
+                                    cout<<"Nothing interesting... π-π"<<endl;
+                                    break;
+                                    }
+                            }
+                        }
+                        else{cout<<"You are unable(too stupid) to break the lock without destroing the content"<<endl;break;}
+                        }
+                }
+            Hero->CalculateStats();
+        cout<<"It disappeared..."<<endl;
+
         }
     }
 }
@@ -754,8 +1019,13 @@ else if (Level[Hero->isinRoom].hasSecret)
     }
 }
 else {cout<<"No interestings finds..."<<endl;}
-cout<<"Besides, you see ";
-if(Level[Hero->isinRoom].Special==0){Cout<<"a drawing on the floor... it looks like some kind of a portal, but it laks power..."<<endl;}
+cout<<"Also, you see ";
+if(Level[Hero->isinRoom].Special==0){cout<<"a drawing on the floor... it looks like some kind of a portal, but it lacks power..."<<endl;}
+else if (Level[Hero->isinRoom].Special==1){cout<<"an anvil-shaped altar, with images of severral weapons engraved onto it's surface... and it seems to emit a faint glow..."<<endl;}
+else if (Level[Hero->isinRoom].Special==2){cout<<"a rather big, floating transluscent blob of something, insisde you can se streaks of light? circling around"<<endl<<"you see black, white, red, blue, silver, green, cyan and magenta ones."<<endl;}
+else if (Level[Hero->isinRoom].Special==3){cout<<"a chest. A Treasure Chest."<<endl<<"THERE. IS. A. TREASURE. CHEST. IN. THE. ROOM!!!"<<endl;}
+else if (Level[Hero->isinRoom].Special==4){cout<<"a...n egg? perhaps... made of stone... and it looks as it would open up any moment now..."<<endl;}
+else {cout << "a rather mundane room, albeit the floor seems to be covered in a thin layer of fog"<<endl;}
 }
 
 void Relocate()
@@ -853,7 +1123,7 @@ switch(rollD(20))
     default: this_thread::sleep_for(chrono::milliseconds(250)); break;
     }
 int now=rollD(Level.size())-1;
-cout<<"You arrived at the enterance to a room...";
+cout<<"You came to the room "<<now<<" ";
 mapa[now]=true;
 if (Level[now].isLocked)
     {
@@ -968,6 +1238,12 @@ getline(cin,Hero->Name);
 cout<<"Welcome... "<<endl;
 this_thread::sleep_for(chrono::milliseconds(875));
 NewFloor();
+cout<<"---------------------------------------------------------------------------------------"<<endl<<"STATUS:"<<endl;
+            cout<<"NAME: "<<Hero->Name<<endl;
+            cout<<"Body: "<<Hero->Body<<endl<<"MIND: "<<Hero->Mind<<endl<<"SOUL: "<<Hero->Soul<<endl;
+            cout<<Hero->HP<<"/"<<Hero->MaxHP<<"HP  "<<Hero->MP<<"/"<<Hero->MaxMp<<"MP"<<endl;
+            if (Hero->Armour>0){cout<<"Armour: "<<Hero->Armour<<endl;}
+            cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl<<"Base Damage: "<<Hero->uzbrojenie.bazDMG<<endl;
 while(Hero->isAlive())
     {
     WhatToDo();
