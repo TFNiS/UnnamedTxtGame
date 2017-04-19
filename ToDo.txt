@@ -1,7 +1,3 @@
 0)debugging
-1)drop broni 
-2)ulepszanie postaci
-3)ulepszanie broni
-4)...
-5)?
+5)MOAR WEPONZ!
 6)bilans, chyba...
