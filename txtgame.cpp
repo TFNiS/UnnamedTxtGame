@@ -85,6 +85,22 @@ void Devour(Weapon food)
     SoulProgress+=(food.SoulDMGmod+food.SoulProgress)/(max((SDiff*0.75),0.85));
     MindProgress+=(food.MindDMGmod+food.MindProgress)/(max((MDiff*0.8),0.9));
     }
+void Morph(Weapon target)
+    {
+    Name=target.Name;
+    BodyProgress=BodyDMGmod;
+    MindProgress=MindDMGmod;
+    SoulProgress=SoulDMGmod;
+    bazProgress=bazDMG;
+    lvl=target.lvl;
+    BDiff=target.BDiff;
+    SDiff=target.SDiff;
+    MDiff=target.MDiff;
+    bazDMG=target.bazDMG;
+    BodyDMGmod=target.BodyDMGmod;
+    SoulDMGmod=target.SoulDMGmod;
+    MindDMGmod=target.MindDMGmod;
+    }
 };
 
 class Room
@@ -143,6 +159,7 @@ void binding()
     MP--;
     HP--;
     uzbrojenie.bound=true;
+    cout<<"You feel a mysterious connection to your weapon... moreover it almost seems as if the weapon was somewhat sentient..."<<endl<<"and hapy for some reason"<<endl;
     CalculateStats();
     }
 bool isAlive()
@@ -211,16 +228,89 @@ if (Hero->Body>=drop.reqBody and Hero->Soul>=drop.reqSoul && Hero->Mind>=drop.re
         }
     else if(Hero->uzbrojenie.bound)
         {
-        cout<<"Your weapon suddenly jumps out of your hand and strikes it!"<<endl;
-        Hero->uzbrojenie.Devour(drop);
+        cout<<"As you look at the weapon you found you feel as if your "<<Hero->uzbrojenie.Name<<"was trying to tell you taht it could be just like this one..."<<endl;
+        cout<<"Should it Keep it's current appearance or should it Switch?";
+        if(rollD(100)>=66){cout<<" you wonder how do those forms Compare against each other..."<<endl<<"You feel as if your weapon wants to warn you about something...";}
+        cout<<endl;
+        bool chosen=false;
+        string choice;
+        do{
+        cin.clear();
+        cin.ignore(666);
+        cout<<"So…?"<<endl;
+        getline(cin,choice);
+        if (choice.compare("Keep")==0 or choice.compare("keep")==0 or choice[0]=='k' or choice[0]=='K')
+            {
+            cout<<"You decide that you like your weapon as it is"<<endl;
+            chosen=true;
+            Hero->uzbrojenie.Devour(drop);
+            cout<<"Your weapon strikes the "<<drop.Name<<"on it's own, destroying it."<<endl<<"You could swear that your weapon was proud of itself..."<<endl;
+            }
+        else if(choice.compare("Switch")==0 or choice.compare("switch")==0 or choice[0]=='S' or choice[0]=='s')
+            {
+            cout<<"You think that "<<drop.Name<<" would be more comfortable to use"<<endl;
+            Hero->uzbrojenie.Morph(drop);
+            cout<<"Your weapon turns into a transparent liquid and drops onto the "<<drop.Name<<endl<<"After a short while there is no visible trace left after the previous shape of your weapon as now it turned into "<<Hero->uzbrojenie.Name<<endl;
+            Hero->CalculateStats();
+            chosen=true;
+            }
+        else if(choice.compare("Compare")==0 or choice.compare("compare")==0 or choice.compare("Inspect")==0 or choice.compare("inspect")==0 or choice[0]=='C' or choice[0]=='c')
+            {
+            cout<<"You feel a stream of information flowing from your weapon."<<endl;
+            cout<<Hero->uzbrojenie.Name<<"/"<<drop.Name<<endl<<"Foundation:"<<Hero->uzbrojenie.bazDMG<<"/"<<drop.bazDMG<<endl;
+            cout<<"Sharpness:"<<Hero->uzbrojenie.BodyDMGmod<<"/";
+            if(drop.BodyDMGmod>Hero->uzbrojenie.BodyDMGmod){cout<<"Higher";if(Hero->uzbrojenie.BDiff<drop.BDiff){cout<<",worse"<<endl;}}
+            else if(drop.BodyDMGmod<Hero->uzbrojenie.BodyDMGmod){cout<<"Lower";if(Hero->uzbrojenie.BDiff>drop.BDiff){cout<<",better"<<endl;}}
+            else if(drop.BodyDMGmod==Hero->uzbrojenie.BodyDMGmod){cout<<"Equal";if(Hero->uzbrojenie.BDiff<drop.BDiff){cout<<",worse"<<endl;}else if(Hero->uzbrojenie.BDiff>drop.BDiff){cout<<",better"<<endl;}}
+            cout<<"Aura:"<<Hero->uzbrojenie.SoulDMGmod<<"/";
+            if(drop.SoulDMGmod>Hero->uzbrojenie.SoulDMGmod){cout<<"Higher";if(Hero->uzbrojenie.SDiff<drop.SDiff){cout<<",worse"<<endl;}}
+            else if(drop.SoulDMGmod<Hero->uzbrojenie.SoulDMGmod){cout<<"Lower";if(Hero->uzbrojenie.SDiff>drop.SDiff){cout<<",better"<<endl;}}
+            else if(drop.SoulDMGmod==Hero->uzbrojenie.SoulDMGmod){cout<<"Equal";if(Hero->uzbrojenie.SDiff<drop.SDiff){cout<<",worse"<<endl;}else if(Hero->uzbrojenie.SDiff>drop.SDiff){cout<<",better"<<endl;}}
+            cout<<"Precision:"<<Hero->uzbrojenie.MindDMGmod<<"/";
+            if(drop.MindDMGmod>Hero->uzbrojenie.MindDMGmod){cout<<"Higher";if(Hero->uzbrojenie.MDiff<drop.MDiff){cout<<",worse"<<endl;}}
+            else if(drop.MindDMGmod<Hero->uzbrojenie.MindDMGmod){cout<<"Lower";if(Hero->uzbrojenie.MDiff>drop.MDiff){cout<<",better"<<endl;}}
+            else if(drop.MindDMGmod==Hero->uzbrojenie.MindDMGmod){cout<<"Equal";if(Hero->uzbrojenie.MDiff<drop.MDiff){cout<<",worse"<<endl;}else if(Hero->uzbrojenie.MDiff>drop.MDiff){cout<<",better"<<endl;}}
+            }
+        else{cout<<"This is somewhat important, you know?"<<endl;}
+        }while(!chosen);
+        }
+    else {cout<<"You already have a weapon ("<<Hero->uzbrojenie.Name<<") but you could always switch to using this one..."<<endl<<"will you Keep the current one or Switch for the new one?"<<endl;
+        if(rollD(100)>=75){cout<<"You could also Compare them..."<<endl;}
+        bool chosen=false;
+        string choice;
+        do{
+        cin.clear();
+        cin.ignore(666);
+        cout<<"So…?"<<endl;
+        getline(cin,choice);
+        if (choice.compare("Keep")==0 or choice.compare("keep")==0 or choice[0]=='k' or choice[0]=='K')
+            {
+            cout<<"You decide to keep your current weapon"<<endl<<"You see as the "<<drop.Name<<" dissipates..."<<endl;
+            chosen=true;
+            }
+        else if(choice.compare("Switch")==0 or choice.compare("switch")==0 or choice[0]=='S' or choice[0]=='s')
+            {
+            cout<<"You swap your current weapon for the "<<drop.Name<<endl<<"Now that you look, you can't find your previous weapon..."<<endl;
+            Hero->uzbrojenie=drop;
+            Hero->CalculateStats();
+            chosen=true;
+            }
+        else if(choice.compare("Compare")==0 or choice.compare("compare")==0 or choice.compare("Inspect")==0 or choice.compare("inspect")==0 or choice[0]=='C' or choice[0]=='c')
+            {
+            cout<<Hero->uzbrojenie.Name<<"/"<<drop.Name<<endl<<"Basic DMG:"<<Hero->uzbrojenie.bazDMG<<"/"<<drop.bazDMG<<endl;
+            }
+        else{cout<<"This is somewhat important, you know?"<<endl;}
+        }while(!chosen);
         }
     }
 else if (Hero->uzbrojenie.bound)
     {
-    cout<<"Your weapon suddenly jumps out of your hand and strikes it!"<<endl;
+    cout<<"You feel it would be a pity to leave this "<<drop.Name<<" here, but, unfortunately you can't find any use for it..."<<endl;
+    cout<<"Your "<<Hero->uzbrojenie.Name<<" suddenly jumps out of your hand and strikes the "<<drop.Name<<"!"<<endl;
     Hero->uzbrojenie.Devour(drop);
+    cout<<"After "<<drop.Name<<" ceased to exist, your weapon returned to your hand on it's own"<<endl<<"There seem to be some barely noitceable changes... and it seems to feel happy for some reasun..."<<endl;
     }
-else {cout<<"Regretfully, yoy are incapable of making use of this weapon"<<endl;}
+else {cout<<"Regretfully, you are incapable of making use of this weapon so you leve it, knowing that it will disappear as soon as you take you eyes away from it"<<endl;}
 }
 
 void Attack(Creature *attacker, Creature *defender)
@@ -274,7 +364,8 @@ while(Enemy->isAlive() and Hero->isAlive())
             cout<<"Body: "<<Hero->Body<<endl<<"MIND: "<<Hero->Mind<<endl<<"SOUL: "<<Hero->Soul<<endl;
             cout<<Hero->HP<<"/"<<Hero->MaxHP<<"HP  "<<Hero->MP<<"/"<<Hero->MaxMp<<"MP"<<endl;
             if (Hero->Armour>0){cout<<"Armour: "<<Hero->Armour<<endl;}
-            cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl<<"Base Damage: "<<Hero->uzbrojenie.bazDMG<<endl;
+            cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl;
+            if(Hero->uzbrojenie.bound){cout<<"Damage output:"<<Hero->DMG<<endl;;}else{cout<<"Base weapon damage:"<<Hero->uzbrojenie.bazDMG<<endl;}
             cout<<"---------------------------------------------------------------------------------------"<<endl;
             if(Enemy->HP>=Enemy->MaxHP*(3/4)){cout<<"Your oponent seems to be in a good shape"<<endl;}
             else if(Enemy->HP>=Enemy->MaxHP/2){cout<<"Your oponent seems to be a bit roughed-up"<<endl;}
@@ -828,7 +919,7 @@ else{
                                             }
                                     break;
                                     }
-                            case 12:
+                            case 12:{LootWpn();break;}
                             case 2:{
                                     int loot=2*rollD(5+rollD(2*LabyrinthFloor));
                                     cout<<"and find "<<loot<<"Energy inside"<<endl;
@@ -922,9 +1013,11 @@ else if (Level[Hero->isinRoom].hasSecret)
     {
     if(Hero->Mind>=Level[Hero->isinRoom].SecretreqMind or Level[Hero->isinRoom].SecretKnown)
         {
-        if(!Level[Hero->isinRoom].SecretKnown){
-        cout<<"You found something!"<<endl;
-        Level[Hero->isinRoom].DiscoverSecret();}
+        if(!Level[Hero->isinRoom].SecretKnown)
+            {
+            cout<<"You found something!"<<endl;
+            Level[Hero->isinRoom].DiscoverSecret();
+            }
         if(Hero->Body>=Level[Hero->isinRoom].SecretreqBody and Hero->Soul>=Level[Hero->isinRoom].SecretreqSoul)
             {switch(rollD(8))
                 {
@@ -1179,7 +1272,14 @@ switch ((int)a)
             cout<<"Body: "<<Hero->Body<<endl<<"MIND: "<<Hero->Mind<<endl<<"SOUL: "<<Hero->Soul<<endl;
             cout<<Hero->HP<<"/"<<Hero->MaxHP<<"HP  "<<Hero->MP<<"/"<<Hero->MaxMp<<"MP"<<endl;
             if (Hero->Armour>0){cout<<"Armour: "<<Hero->Armour<<endl;}
-            cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl<<"Base Damage: "<<Hero->uzbrojenie.bazDMG<<endl;
+            cout<<"Energy:"<<Hero->Energy<<endl;
+            cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl;
+            if(Hero->uzbrojenie.bound)
+                {
+                cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<endl;
+                cout<<"Damage Output: "<<Hero->DMG<<endl;
+                }
+            else{cout<<"DMG:"<<Hero->uzbrojenie.bazDMG<<endl;}
             break;
             }
     case 'A':
@@ -1196,7 +1296,7 @@ switch ((int)a)
     case 'r':
     case 'R':{cout<<"you rest for a while..."<<endl;
            this_thread::sleep_for(chrono::milliseconds(600));
-           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; cout<<Hero->HP<<"/"<<Hero->MaxHP<<endl; Hero->CalculateStats();}
+           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; cout<<"You recovered"<<Hero->MaxHP/2<<"HP & all the mising MP"<<endl; Hero->CalculateStats();}
            else{cout<<"You have been attacked while you were resting!"<<endl;
            Spawn();
            }
