@@ -320,10 +320,10 @@ else {cout<<"Regretfully, you are incapable of making use of this weapon so you 
 void Attack(Creature *attacker, Creature *defender)
 {
 cout<<attacker->Name<<" attacks "<<defender->Name<<" and..."<<endl;
-this_thread::sleep_for(chrono::milliseconds(125));
+//this_thread::sleep_for(chrono::milliseconds(125));
 if(attacker->Attack+rollD(40)>defender->Defence+rollD(40))
     {
-    this_thread::sleep_for(chrono::milliseconds(455));
+    //this_thread::sleep_for(chrono::milliseconds(455));
     cout<<"... Hits,";
     if (defender->Armour>=attacker->DMG)
         {
@@ -340,7 +340,7 @@ if(attacker->Attack+rollD(40)>defender->Defence+rollD(40))
         }
     }
 else {
-    this_thread::sleep_for(chrono::milliseconds(375));
+    //this_thread::sleep_for(chrono::milliseconds(375));
     cout<<"fails."<<endl;
     return;
     }
@@ -387,7 +387,7 @@ while(Enemy->isAlive() and Hero->isAlive())
                 delta=(int)((double)(Hero->Defence)*0.375)+5;
                 Hero->Defence+=delta;
                 cout<<"You ready yourself for the upcoming attack."<<endl;
-                this_thread::sleep_for(chrono::milliseconds(500));
+                //this_thread::sleep_for(chrono::milliseconds(500));
                 break;
                 }
         case 'F':
@@ -400,7 +400,7 @@ while(Enemy->isAlive() and Hero->isAlive())
                 }
         default:{
                 cout<<"You stand dazed, unshure what to do."<<endl;
-                this_thread::sleep_for(chrono::milliseconds(666));
+                //this_thread::sleep_for(chrono::milliseconds(666));
                 break;
                 }
         }
@@ -418,7 +418,7 @@ while(Enemy->isAlive() and Hero->isAlive())
         else {
         string a;
             cout<<"You see a floating blob of... something."<<endl;
-            this_thread::sleep_for(chrono::milliseconds(500));
+            //this_thread::sleep_for(chrono::milliseconds(500));
             cout<<"What will you do?"<<endl;
             if(rollD(10)>=8){cout<<"...Will you try to TAKE it?"<<endl;}
             getline(cin,a);
@@ -449,7 +449,7 @@ while(Enemy->isAlive() and Hero->isAlive())
                         }
                 case 't':
                 case 'T':{cout<<"You reach your hand and as you touch it..."<<endl;
-                        this_thread::sleep_for(chrono::milliseconds(250));
+                        //this_thread::sleep_for(chrono::milliseconds(250));
                         switch(rollD(12))
                             {
                             case 1:
@@ -465,7 +465,7 @@ while(Enemy->isAlive() and Hero->isAlive())
 
                             }
                         }
-                default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));break;}
+                default: {cout<<"You observe as it dissipates..."<<endl;} //this_thread::sleep_for(chrono::milliseconds(875));break;}
                 }
             }
         if(rollD(10+rollD(9+rollD(8))+rollD(11))==11){LootWpn();}
@@ -685,14 +685,14 @@ if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a'
     if(quota<=0){cout<<"You hanged your mind and stepped away from the anvil"<<endl; return;}
     if (quota*15<Hero->Energy)
         {
-        this_thread::sleep_for(chrono::milliseconds(666));
+        //this_thread::sleep_for(chrono::milliseconds(666));
         cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
         Hero->Energy-=quota*15-rollD(floor(quota/3-2));
         return;
         }
     else if(quota*15-Hero->Energy<=Hero->MP)
         {
-        this_thread::sleep_for(chrono::milliseconds(666));
+        //this_thread::sleep_for(chrono::milliseconds(666));
         cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
         Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/3-2));
         Hero->Energy=0;
@@ -732,7 +732,7 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
                             Hero->uzbrojenie.BodyProgress-=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl);
                             Hero->uzbrojenie.BodyDMGmod++;
                             Hero->uzbrojenie.lvl++;
-                            this_thread::sleep_for(chrono::milliseconds(375));
+                            //this_thread::sleep_for(chrono::milliseconds(375));
                             cout<<"Reforging succes!"<<endl;
                             }
                         if ((Hero->uzbrojenie.BodyProgress+Hero->Energy/4)>=(Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff) and Hero->uzbrojenie.BodyProgress<Hero->uzbrojenie.BodyDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.BDiff)
@@ -759,7 +759,7 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
                             Hero->uzbrojenie.SoulProgress-=(Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff);
                             Hero->uzbrojenie.SoulDMGmod++;
                             Hero->uzbrojenie.lvl++;
-                            this_thread::sleep_for(chrono::milliseconds(375));
+                            //this_thread::sleep_for(chrono::milliseconds(375));
                             cout<<"Reforging succes!"<<endl;
                             }
                         if ((Hero->uzbrojenie.SoulProgress+Hero->Energy/4)>=Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff and Hero->uzbrojenie.SoulProgress<Hero->uzbrojenie.SoulDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.SDiff)
@@ -786,7 +786,7 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
                             Hero->uzbrojenie.MindProgress-=(Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl*Hero->uzbrojenie.MDiff);
                             Hero->uzbrojenie.MindDMGmod++;
                             Hero->uzbrojenie.lvl++;
-                            this_thread::sleep_for(chrono::milliseconds(375));
+                            //this_thread::sleep_for(chrono::milliseconds(375));
                             cout<<"Reforging succes!"<<endl;
                             }
                         if ((Hero->uzbrojenie.MindProgress+Hero->Energy/4)>=Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl and Hero->uzbrojenie.MindProgress<Hero->uzbrojenie.MindDMGmod+Hero->uzbrojenie.lvl)
@@ -812,7 +812,7 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
                             {
                             Hero->uzbrojenie.bazProgress-=Hero->uzbrojenie.bazDMG*4+Hero->uzbrojenie.lvl;
                             Hero->uzbrojenie.bazDMG++;
-                            this_thread::sleep_for(chrono::milliseconds(250));
+                            //this_thread::sleep_for(chrono::milliseconds(250));
                             }
                         cout<<"Done."<<endl;
                         break;
@@ -883,7 +883,7 @@ else{
                 }
             else{cout<<"You left the room, but the enemy disapeared when you looked back..."<<endl; Level[Hero->isinRoom].isOccupied=true;}
             }
-        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacjed something but you are unshure what exsactly that 'Something' is."<<endl;}
+        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacked something but you are unshure what exsactly that 'Something' is."<<endl;}
         }
     else if (Level[Hero->isinRoom].Special==3)
         {
@@ -1009,7 +1009,7 @@ void Search()
 if(Hero->uzbrojenie.lvl==-1){LootWpn();return;}
 if(Hero->isinRoom==-1)
 {
-this_thread::sleep_for(chrono::milliseconds(404));
+//this_thread::sleep_for(chrono::milliseconds(404));
 cout<<"The corridor you're in is rather unremarkable. Maybe you should explore a bit?"<<endl;
 return;
 }
@@ -1050,7 +1050,7 @@ else if (Level[Hero->isinRoom].hasSecret)
                 case 6:{
                 string a;
             cout<<"You see a floating blob of... something."<<endl;
-            this_thread::sleep_for(chrono::milliseconds(500));
+            //this_thread::sleep_for(chrono::milliseconds(500));
             cout<<"What will you do?"<<endl;
             if(rollD(10)>=9){cout<<"...Will you try to take it?"<<endl;}
             getline(cin,a);
@@ -1083,7 +1083,7 @@ else if (Level[Hero->isinRoom].hasSecret)
                         }
                 case 't':
                 case 'T':{cout<<"You reach your hand and touch it..."<<endl;
-                        this_thread::sleep_for(chrono::milliseconds(250));
+                        //this_thread::sleep_for(chrono::milliseconds(250));
                         switch(rollD(20))
                             {
                             case 1:
@@ -1102,7 +1102,7 @@ else if (Level[Hero->isinRoom].hasSecret)
                         cout<<"It sinks into you... but you don't feel anythig wrong."<<endl;
                         break;
                         }
-                default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));
+                default: {cout<<"You observe as it dissipates..."<<endl; //this_thread::sleep_for(chrono::milliseconds(875));
                         Level[Hero->isinRoom].hasSecret=false;
                         break;
                         }
@@ -1166,12 +1166,12 @@ cout<<"And you arrive at your destination!"<<endl;
 if (Level[go].isLocked)
     {
     cout<<"but it's locked."<<endl;
-    if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[go].isLocked=false;}
+    if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){/*this_thread::sleep_for(chrono::milliseconds(600));*/cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[go].isLocked=false;}
     else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
     }
 if(Level[go].isSealed)
     {
-    cout<<"You eccountered a magical boundary!";
+    cout<<"You eccountered a magical boundary! "<<endl;
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
@@ -1202,13 +1202,13 @@ cout<<"You start to wander around..."<<endl;
 Hero->isinRoom==-1;
 switch(rollD(20))
     {
-    case 13:this_thread::sleep_for(chrono::milliseconds(130)); break;
-    case 1:this_thread::sleep_for(chrono::milliseconds(10));break;
-    case 2:this_thread::sleep_for(chrono::milliseconds(20));break;
-    case 6:this_thread::sleep_for(chrono::milliseconds(60));break;
+    case 13://this_thread::sleep_for(chrono::milliseconds(130)); break;
+    case 1://this_thread::sleep_for(chrono::milliseconds(10));break;
+    case 2://this_thread::sleep_for(chrono::milliseconds(20));break;
+    case 6://this_thread::sleep_for(chrono::milliseconds(60));break;
     case 0:{(WALKA());break;}
     case 18:{cout<<"You found some refreshments along the way..."<<endl;
-        this_thread::sleep_for(chrono::milliseconds(180));
+        //this_thread::sleep_for(chrono::milliseconds(180));
         Hero->HP++;
         Hero->MP++;
         Hero->CalculateStats();
@@ -1217,7 +1217,7 @@ switch(rollD(20))
             cout<<"You found some Energy along the way!"<<endl;
             Hero->Energy+=rollD(rollD(LabyrinthFloor/10)+2);
             }
-    default: this_thread::sleep_for(chrono::milliseconds(250)); break;
+    default: /*this_thread::sleep_for(chrono::milliseconds(250));*/ break;
     }
 int now=rollD(Level.size())-1;
 cout<<"You came to the room "<<now<<" ";
@@ -1225,7 +1225,7 @@ mapa[now]=true;
 if (Level[now].isLocked)
     {
     cout<<"but it's locked."<<endl;
-    if (Hero->Mind+(int)(Hero->Soul*0.15)>=Level[now].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[now].isLocked=false;}
+    if (Hero->Mind+(int)(Hero->Soul*0.15)>=Level[now].LockLevel){/*this_thread::sleep_for(chrono::milliseconds(600));*/cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[now].isLocked=false;}
     else{Level[now].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, you'll have better luck next time, especially so that you are begining to understand how that one works..."<<endl;
     Hero->isinRoom=-1;
     return;}
@@ -1299,8 +1299,8 @@ switch ((int)a)
             }
     case 'r':
     case 'R':{cout<<"you rest for a while..."<<endl;
-           this_thread::sleep_for(chrono::milliseconds(600));
-           if(rollD(100)>10){this_thread::sleep_for(chrono::milliseconds(440));Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp; cout<<"You recovered"<<Hero->MaxHP/2<<"HP & all the mising MP"<<endl; Hero->CalculateStats();}
+           //this_thread::sleep_for(chrono::milliseconds(600));
+           if(rollD(100)>10){/*this_thread::sleep_for(chrono::milliseconds(440));*/Hero->HP+=Hero->MaxHP/2;Hero->MP=Hero->MaxMp;if(Hero->HP==Hero->MaxHP){cout<<"You are as healthy as you can be"<<endl;}else{ cout<<"You recovered "<<Hero->MaxHP/2<<"HP & all the mising MP"<<endl;} Hero->CalculateStats();}
            else{cout<<"You have been attacked while you were resting!"<<endl;
            Spawn();
            }
@@ -1340,7 +1340,7 @@ killcount=0;
 cout<<"How, should I call you?"<<endl;
 getline(cin,Hero->Name);
 cout<<"Welcome... "<<endl;
-this_thread::sleep_for(chrono::milliseconds(875));
+//this_thread::sleep_for(chrono::milliseconds(875));
 NewFloor();
 cout<<"---------------------------------------------------------------------------------------"<<endl<<"STATUS:"<<endl;
             cout<<"NAME: "<<Hero->Name<<endl;
@@ -1352,9 +1352,9 @@ while(Hero->isAlive())
     {
     WhatToDo();
     }
-this_thread::sleep_for(chrono::milliseconds(666));
+//this_thread::sleep_for(chrono::milliseconds(666));
 cout<<"And so... ";
-this_thread::sleep_for(chrono::milliseconds(100));
+//this_thread::sleep_for(chrono::milliseconds(100));
 cout<<Hero->Name<< " has fallen..."<<endl;
 delete Hero;
 delete Enemy;
