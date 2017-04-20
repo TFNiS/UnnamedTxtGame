@@ -869,7 +869,7 @@ else{
         }
     else if(Level[Hero->isinRoom].Special==2)
         {
-        cout<<"You stand in front of a big floating blob of ransluscent liquid with multiple streaks of light inside it, and touch it."<<endl;
+        cout<<"You stand in front of a big floating blob of transluscent liquid with multiple streaks of light inside it, and touch it."<<endl;
         Strenghten();
         }
     else if(Level[Hero->isinRoom].Special==4)
@@ -886,7 +886,7 @@ else{
                 }
             else{cout<<"You left the room, but the enemy disapeared when you looked back..."<<endl; Level[Hero->isinRoom].isOccupied=true;}
             }
-        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacjed something but you are unshure what exsactly that 'Something' is."<<endl;}
+        else {cout<<"and  its smooth surface is cold to the touch... it feels as if it lacked something but you are unshure what exsactly that 'Something' is."<<endl;}
         }
     else if (Level[Hero->isinRoom].Special==3)
         {
@@ -894,6 +894,7 @@ else{
             switch(rollD(20))
                 {
                 case 1:{cout<<"But it's a trap!"<<endl<<"The enemy destroys the chest in which it was hiding and attacks you!"<<endl;
+                        Level[Hero->isinRoom].Special==-1;
                         Level[Hero->isinRoom].isOccupied=true;
                         if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched th enemy"<<endl;}
                         else{
@@ -903,12 +904,13 @@ else{
                         break;
                         }
                 case 2:{
+                        Level[Hero->isinRoom].Special==-1;
                         int loot=rollD(5+rollD(2*LabyrinthFloor));
                         cout<<"and find "<<loot<<"Energy inside"<<endl;
                         Hero->Energy+=loot;
                         break;
                         }
-                case 13:{cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
+                case 13:{Level[Hero->isinRoom].Special==-1;cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
                 default:{
                         cout<<"It's locked!"<<endl;
                         Level[Hero->isinRoom].LockLevel=1+rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
@@ -918,6 +920,7 @@ else{
                         switch(rollD(13))
                             {
                             case 1:{
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<"The enemy jumps out of the chest... you just opened..."<<endl;
                                     if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched the enemy"<<endl;}
                                         else{
@@ -926,51 +929,59 @@ else{
                                             }
                                     break;
                                     }
-                            case 12:{LootWpn();break;}
+                            case 12:{Level[Hero->isinRoom].Special==-1;LootWpn();break;}
                             case 2:{
                                     int loot=2*rollD(5+rollD(2*LabyrinthFloor));
                                     cout<<"and find "<<loot<<"Energy inside"<<endl;
                                     Hero->Energy+=loot;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                         }
                             case 3:{
                                     cout<<"As you open the chest, everything turns Red for a moment...";
                                     Hero->HPmods+=rollD(3);
                                     cout<<" and you feel slighty different afterwards."<<endl;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             case 4:{
                                     cout<<"As you open the chest, everything turns Blue for a moment...";
                                     Hero->MPmods+=rollD(3);
                                     cout<<" and you feel slighty different afterwards."<<endl;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             case 5:{
                                     cout<<"As you open the chest, everything turns White for a moment...";
                                     Hero->atkmods+=rollD(2);
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 6:{
                                     cout<<"As you open the chest, everything turns Black for a moment...";
                                     Hero->defmods+=rollD(2);
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 7:{
                                     cout<<"As you open the chest, everything turns Silver for a moment...";
                                     Hero->DMGmods+=rollD(2);
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 8:{
                                     cout<<"You find some armour!"<<endl;
                                     Hero->Armour+=rollD(3+LabyrinthFloor);
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             case 9:{
                                     cout<<"As you open the chest, everything turns Green for a moment...";
                                     Hero->Mind++;
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
@@ -978,21 +989,25 @@ else{
                                     cout<<"As you open the chest, everything turns Cyan for a moment...";
                                     Hero->Soul++;
                                     cout<<" and you feel slighty different afterwards."<<endl;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             case 11:{
                                     cout<<"As you open the chest, everything turns Magenta for a moment...";
                                     Hero->Body++;
+                                    Level[Hero->isinRoom].Special==-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 13:{
                                     cout<<"Guess what,"<<endl<<" IT'S EMPTY!"<<endl;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             default:{
                                     Hero->Energy++;
                                     cout<<"Nothing interesting... π-π"<<endl;
+                                    Level[Hero->isinRoom].Special==-1;
                                     break;
                                     }
                             }
@@ -1001,9 +1016,8 @@ else{
                         }
                 }
             Hero->CalculateStats();
-        cout<<"It disappeared..."<<endl;
-
-        }
+        cout<<"The chest abruptly turns into smoke."<<endl;
+                }
     }
 }
 
@@ -1321,7 +1335,7 @@ switch ((int)a)
     case 's':{Search();break;}
     case 'I':
     case 'i':{Interact();break;}
-    case '?':{cout<<endl<<"---------------------------------------------------------------"<<endl<<"? → shows this"<<endl<<"a → attacks"<<endl<<"s → searches around"<<endl<<"i→ iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e → explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<"---------------------------------------------------------------"<<endl;break;}
+    case '?':{cout<<endl<<"---------------------------------------------------------------"<<endl<<"? -> shows this"<<endl<<"a -> attacks"<<endl<<"s -> searches around"<<endl<<"i -> iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e -> explores the area"<<endl<<"g -> allows to move to a previously visited room"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<"---------------------------------------------------------------"<<endl;break;}
     default:{cout<<"Sorry, it's impossible."<<endl;}
     }
 }
@@ -1330,8 +1344,8 @@ int main()
 {
 NG=true;
 cout<<"---------------------------------------------------------------------------------"<<endl;
-cout<<endl<<"---------------------------------------------------------------"<<endl<<"? -> shows this"<<endl<<"a -> attacks"<<endl<<"s -> searches around"<<endl<<"i -> iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e -> explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<"---------------------------------------------------------------"<<endl;
-cout<<"**********************"<<endl<<"Pro Tips:"<<endl<<"most of the time answer beggining with letter 'D' (or 'd') can(and will) be lethal for you"<<endl<<"SEARCH EVERYTHING!"<<endl<<"Starting floor is a Tutorial of sorts..."<<endl<<"**********************"<<endl;
+cout<<endl<<"---------------------------------------------------------------"<<endl<<"? -> shows this"<<endl<<"a -> attacks"<<endl<<"s -> searches around"<<endl<<"i -> iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e -> explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<" oh, yes, 'd' is commiting sucide, just so you know"<<endl<<"---------------------------------------------------------------"<<endl;
+cout<<"**********************"<<endl<<"Pro Tips:"<<endl<<"most of the time answer beggining with letter 'D' (or 'd') can be lethal for you"<<endl<<"SEARCH EVERYTHING!"<<endl<<"Starting floor is a Tutorial of sorts..."<<"Enery is a currency used for several things, so if something doesn't work, but it looks as if it should, it probaby means that you are too poor"<<endl<<"**********************"<<endl;
 Hero=new Creature();
 Enemy=new Creature();
 srand(time(NULL));
@@ -1381,3 +1395,4 @@ getline(cin,q);
 if (q[0]=='y' or q[0]=='Y'){main();}
 return 0;
 }
+//Armoury explanation: Name(bez Spacji) DMG_baz Body_Mult Soul_mult Mind_mult Body_req Soul_req Mind_req Body_Mult_Upgrade_Difficulty Soul_Mult_Upgrade_Difficulty Mind_Mult_Upgrade_Difficulty
