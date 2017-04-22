@@ -15,6 +15,8 @@ as a project for TFNiS 2017
 
 using namespace std;
 
+bool explored;
+int rpt;
 int inputint()
 {
 bool neg=false;
@@ -201,12 +203,12 @@ Armoury.open("Armoury.txt");
 int j;
 Armoury>>j;
 int k=rollD(j)-1;
-cout<<k<<endl;
+//cout<<k<<endl;
 for (int i=0;i<j;i++)
     {
     string temp;
     getline(Armoury,temp);
-    cout<<temp<<endl;
+  //  cout<<temp<<endl;
     if(i==k)
         {
         Armoury>>drop.Name>>drop.bazDMG>>drop.BodyDMGmod>>drop.SoulDMGmod>>drop.MindDMGmod>>drop.reqBody>>drop.reqSoul>>drop.reqMind>>drop.BDiff>>drop.SDiff>>drop.MDiff;
@@ -522,6 +524,7 @@ return WALKA();
 
 void NewFloor()
 {
+explored=false;
 mapa.clear();
 Level.clear();
 Hero->isinRoom=-1;
@@ -894,7 +897,7 @@ else{
             switch(rollD(20))
                 {
                 case 1:{cout<<"But it's a trap!"<<endl<<"The enemy destroys the chest in which it was hiding and attacks you!"<<endl;
-                        Level[Hero->isinRoom].Special==-1;
+                        Level[Hero->isinRoom].Special=-1;
                         Level[Hero->isinRoom].isOccupied=true;
                         if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched th enemy"<<endl;}
                         else{
@@ -904,23 +907,23 @@ else{
                         break;
                         }
                 case 2:{
-                        Level[Hero->isinRoom].Special==-1;
+                        Level[Hero->isinRoom].Special=-1;
                         int loot=rollD(5+rollD(2*LabyrinthFloor));
                         cout<<"and find "<<loot<<"Energy inside"<<endl;
                         Hero->Energy+=loot;
                         break;
                         }
-                case 13:{Level[Hero->isinRoom].Special==-1;cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
+                case 13:{Level[Hero->isinRoom].Special=-1;cout<<"..."<<endl<<"It's EMPTY!"<<endl;break;}
                 default:{
                         cout<<"It's locked!"<<endl;
-                        Level[Hero->isinRoom].LockLevel=1+rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+                        Level[Hero->isinRoom].LockLevel=1+rollD(6)+LabyrinthFloor+0.1*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
                         if((Hero->Mind+1+Hero->Soul/5+Hero->Body/15+Hero->Attack/25)<Level[Hero->isinRoom].LockLevel)
                         {
                         lockcount++;
                         switch(rollD(13))
                             {
                             case 1:{
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<"The enemy jumps out of the chest... you just opened..."<<endl;
                                     if(Spawn()){Level[Hero->isinRoom].isOccupied=false; cout<< "You dipatched the enemy"<<endl;}
                                         else{
@@ -929,59 +932,59 @@ else{
                                             }
                                     break;
                                     }
-                            case 12:{Level[Hero->isinRoom].Special==-1;LootWpn();break;}
+                            case 12:{Level[Hero->isinRoom].Special=-1;LootWpn();break;}
                             case 2:{
                                     int loot=2*rollD(5+rollD(2*LabyrinthFloor));
                                     cout<<"and find "<<loot<<"Energy inside"<<endl;
                                     Hero->Energy+=loot;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                         }
                             case 3:{
                                     cout<<"As you open the chest, everything turns Red for a moment...";
                                     Hero->HPmods+=rollD(3);
                                     cout<<" and you feel slighty different afterwards."<<endl;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             case 4:{
                                     cout<<"As you open the chest, everything turns Blue for a moment...";
                                     Hero->MPmods+=rollD(3);
                                     cout<<" and you feel slighty different afterwards."<<endl;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             case 5:{
                                     cout<<"As you open the chest, everything turns White for a moment...";
                                     Hero->atkmods+=rollD(2);
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 6:{
                                     cout<<"As you open the chest, everything turns Black for a moment...";
                                     Hero->defmods+=rollD(2);
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 7:{
                                     cout<<"As you open the chest, everything turns Silver for a moment...";
                                     Hero->DMGmods+=rollD(2);
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 8:{
                                     cout<<"You find some armour!"<<endl;
                                     Hero->Armour+=rollD(3+LabyrinthFloor);
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             case 9:{
                                     cout<<"As you open the chest, everything turns Green for a moment...";
                                     Hero->Mind++;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
@@ -989,30 +992,34 @@ else{
                                     cout<<"As you open the chest, everything turns Cyan for a moment...";
                                     Hero->Soul++;
                                     cout<<" and you feel slighty different afterwards."<<endl;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             case 11:{
                                     cout<<"As you open the chest, everything turns Magenta for a moment...";
                                     Hero->Body++;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     cout<<" and you feel slighty different afterwards."<<endl;
                                     break;
                                     }
                             case 13:{
                                     cout<<"Guess what,"<<endl<<" IT'S EMPTY!"<<endl;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             default:{
                                     Hero->Energy++;
                                     cout<<"Nothing interesting... π-π"<<endl;
-                                    Level[Hero->isinRoom].Special==-1;
+                                    Level[Hero->isinRoom].Special=-1;
                                     break;
                                     }
                             }
                         }
-                        else{cout<<"You are unable(too stupid) to break the lock without destroing the content"<<endl;break;}
+                        else{cout<<"You were unable(too stupid) to open the Chest without destroying it's contents"<<endl;
+                            Level[Hero->isinRoom].Special=-1;
+                            Hero->Energy++;
+                            break;
+                            }
                         }
                 }
             Hero->CalculateStats();
@@ -1216,7 +1223,9 @@ if(Level[Hero->isinRoom].isOccupied)
 
 void Explore()
 {
-cout<<"You start to wander around..."<<endl;
+if(rpt>0 and !explored){cout<<"...and you wander in search of new places..."<<endl;}
+else if(explored){cout<<"You see no point in doing that, since you know this floor like the back of you hand..."<<endl;return;}
+else{cout<<"You start to wander around..."<<endl;}
 Hero->isinRoom==-1;
 switch(rollD(20))
     {
@@ -1237,7 +1246,29 @@ switch(rollD(20))
             }
     default: this_thread::sleep_for(chrono::milliseconds(250)); break;
     }
+
 int now=rollD(Level.size())-1;
+if(mapa[now]==true and rpt<5 and !explored)
+    {
+    rpt++;
+    Explore();
+    return;
+    }
+else
+    {
+    explored=true;
+    for(int i=0;i<Level.size() and explored;i++)
+        {
+        if(mapa[i]==false)
+            {
+            explored=false;
+            }
+        }
+    if(explored)
+        {
+        cout<<"You have fully explored this floor, maybe it's time to delve deeper?"<<endl;
+        }
+    }
 cout<<"You came to the room "<<now<<" ";
 mapa[now]=true;
 if (Level[now].isLocked)
@@ -1250,7 +1281,7 @@ if (Level[now].isLocked)
     }
 if(Level[now].isSealed)
     {
-    cout<<"You eccountered a magical boundary!";
+    cout<<"but you eccountered a magical boundary!";
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
@@ -1273,6 +1304,7 @@ if(Level[Hero->isinRoom].isOccupied)
         }
     else {Hero->isinRoom=-1; cout<<"You left the room, when you looked it was sa if the enemy just dissapeared, but it surely will be there one you enter again..."<<endl;}
     }
+rpt=0;
 }
 
 void WhatToDo()
@@ -1342,6 +1374,7 @@ switch ((int)a)
 
 int main()
 {
+rpt=false;
 NG=true;
 cout<<"---------------------------------------------------------------------------------"<<endl;
 cout<<endl<<"---------------------------------------------------------------"<<endl<<"? -> shows this"<<endl<<"a -> attacks"<<endl<<"s -> searches around"<<endl<<"i -> iteracts with whatever there is to interact with (usually nothing)"<<endl<<"e -> explores the area"<<endl<<"There are some more but you'll have to fid out on your own..."<<endl<<" oh, yes, 'd' is commiting sucide, just so you know"<<endl<<"---------------------------------------------------------------"<<endl;
