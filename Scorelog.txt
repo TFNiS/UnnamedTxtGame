@@ -1,0 +1,4 @@
+AS: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
+ja: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 2
+Elerdor: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 4
+Elerdor: Enemies Defeated: 4 | Floor: 1 | Obstacles Overcame: 3
