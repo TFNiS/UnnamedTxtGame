@@ -355,14 +355,14 @@ bool WALKA()
 {
 //cout<<Enemy->Body<<" "<<Enemy->Soul<<" "<<Enemy->HP<<" "<<Enemy->MaxHP<<endl;
 cout<<"You eccountered  an enemy!"<<endl;
-bool v=false;
+bool v=true;
 while(Enemy->isAlive() and Hero->isAlive())
     {
     int delta;
     bool d=0;
     string a;
     char c;
-    cout<<"Will you atack or defend?"<<endl<<"You have "<<Hero->HP<<"HP left)"<<endl;
+    cout<<"Will you atack or defend?"<<endl;
     getline(cin,a);
     c=a[0];
     switch(c)
@@ -412,14 +412,13 @@ while(Enemy->isAlive() and Hero->isAlive())
         Attack(Enemy,Hero);
         if(d){Hero->Defence-=delta;}
         if(!Hero->isAlive()){v=false;}
-        if(!Enemy->isAlive()){v=true;}
         }
     if(v){
         cout<<"You see as "<<Enemy->Name<<" slowly dissipates"<<endl;
         Hero->Energy+=1+(floor(LabyrinthFloor/10));
         if (Hero->Body+Hero->Mind+Hero->Soul>2*(Enemy->Body+Enemy->Mind+Enemy->Soul))
             {
-            Hero->Energy+=floor(LabyrinthFloor/12)+1+rollD(ceil(LabyrinthFloor/6)+rollD(4));
+            Hero->Energy+=floor(LabyrinthFloor/12);
             }
         else {
         string a;
@@ -484,15 +483,15 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
-if(LabyrinthFloor==0){Enemy->Name="Training Dummy";}
-int stat=1+ceil(LabyrinthFloor/5)+rollD(floor(LabyrinthFloor/100));
+if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
+int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
 Enemy->Soul=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Soul;
 Enemy->Mind=LabyrinthFloor+rollD(stat);
-Enemy->HPmods=1+rollD(LabyrinthFloor*2)+rollD(3);
-Enemy->MPmods=rollD(LabyrinthFloor+15);
+Enemy->HPmods+=1+rollD(LabyrinthFloor*2)+rollD(3);
+Enemy->MPmods+=rollD(LabyrinthFloor+15);
 Enemy->uzbrojenie.bazDMG+=LabyrinthFloor + rollD(floor(LabyrinthFloor/33));
 if(Enemy->Body>Enemy->Soul)
     {
@@ -520,8 +519,6 @@ else if (Enemy->Mind>Enemy->Body)
 else {Enemy->uzbrojenie.BodyDMGmod=LabyrinthFloor/13;Enemy->uzbrojenie.SoulDMGmod=LabyrinthFloor/23;Enemy->uzbrojenie.MindDMGmod=LabyrinthFloor/33;}
 Enemy->CalculateStats();
 Enemy->HP=Enemy->MaxHP;
-Enemy->MP=Enemy->MaxMp;
-Enemy->CalculateStats();
 return WALKA();
 }
 
@@ -547,8 +544,8 @@ Level[rooms].hasSecret=min(1,max(0,(-4+rollD(6))));
 Level[rooms].isOccupied=1;
 Level[rooms].isLocked=min(1,max(0,(-5+rollD(6))));
 Level[rooms].isSealed=1;
-Level[rooms].SealLevel=rollD(3)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*rollD(LabyrinthFloor))+max(-1,-66+LabyrinthFloor);
-Level[rooms].LockLevel=rollD(3)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+Level[rooms].SealLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*rollD(LabyrinthFloor))+max(-1,66+LabyrinthFloor);
+Level[rooms].LockLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
 if (Level[rooms].hasSecret==true)
     {
     Level[rooms].MakeSecret();
@@ -562,8 +559,8 @@ for (int i=((int)(5+LabyrinthFloor*1.025+rollD(LabyrinthFloor)+max(0,-66+Labyrin
     Level[rooms].MakeSecret();
     Level[rooms].isSealed=min(1,max(0,(-7+rollD(8))));
     Level[rooms].isLocked=min(1,max(0,(-9+rollD(10))));
-    Level[rooms].SealLevel=rollD(3)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)+rollD(LabyrinthFloor/10));
-    Level[rooms].LockLevel=rollD(3)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)/10);
+    Level[rooms].SealLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*LabyrinthFloor*rollD(LabyrinthFloor));
+    Level[rooms].LockLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
     Level[rooms].Special=-1;
     Level[rooms].MakeSecret();
     }
@@ -1038,7 +1035,6 @@ if(Hero->isinRoom==-1)
 {
 this_thread::sleep_for(chrono::milliseconds(404));
 cout<<"The corridor you're in is rather unremarkable. Maybe you should explore a bit?"<<endl;
-if(rollD(6)==6){Hero->Energy++;}
 return;
 }
 else if (Level[Hero->isinRoom].hasSecret)
@@ -1153,25 +1149,19 @@ else if (Level[Hero->isinRoom].Special==4){cout<<"a...n egg? perhaps... made of 
 else {cout << "a rather mundane room, albeit the floor seems to be covered in a thin layer of fog"<<endl;}
 }
 
-bool unexplored;
-
 void Relocate()
 {
-    for(int i=0;i<Level.size() and explored;i++)
-        {
-        if(mapa[i]==false)
-            {
-            explored=false;
-            }
+bool knows=false;
 if(Hero->isinRoom<=-1){cout<<"Currently you aren't in any room, but you know how to get to these rooms: "<<endl;}
 else{cout<<"You are in the room "<<Hero->isinRoom<<" and you know how to get to rooms:"<<endl;}
 for(int i=0,disp=0;i<mapa.size();i++)
     {
     if(mapa[i])
-        {cout<<i<<" ";disp++;}
+        {cout<<i<<" ";disp++;knows=true;}
     if ((disp+1)%10==0)
         {cout<<endl;}
     }
+if(!knows){cout<<"Let me corect that statement":<<endl<<"YOU HAVE NO IDEA WHERE (if any) ARE ROOMS";}
 cout<<endl;
 int go;
 go=inputint();
@@ -1180,7 +1170,7 @@ else if (go<0){Hero->isinRoom=-1;cout<<"You left the room."<<endl;}
 else if( go>mapa.size() or mapa[go]==false){cout<<"You can't be sure if such room even exists... so you stay where you are."<<endl;return;}
 else{
 cout<<"You set off..."<<endl;
-//cout<<Level[go].isOccupied;
+cout<<Level[go].isOccupied;
 switch(rollD(20))
     {
     case 13:
@@ -1191,7 +1181,6 @@ switch(rollD(20))
     case 18:{cout<<"You found some refreshments along the way..."<<endl;
         Hero->HP++;
         Hero->MP++;
-        Hero->CalculateStats();
         break;}
     case 20:{
             cout<<"You found some Energy along the way"<<endl;
@@ -1199,27 +1188,27 @@ switch(rollD(20))
             }
     default: break;
     }
-//cout<<endl<<endl<<go<<endl<<endl;
+cout<<endl<<endl<<go<<endl<<endl;
 cout<<"And you arrive at your destination!"<<endl;
 if (Level[go].isLocked)
     {
     cout<<"but it's locked."<<endl;
-    if (1+Hero->Mind+(int)(Hero->Soul*0.75)+lockcount/4>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[go].isLocked=false;}
-    else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2)+1+lockcount/4;cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
+    if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[go].isLocked=false;}
+    else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
     }
 if(Level[go].isSealed)
     {
-    cout<<"You eccountered a magical boundary!"<<endl;
+    cout<<"You eccountered a magical boundary!";
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
-    do{m=inputint();}while(m<0 or m>Hero->MP);
-    if ((m*((Hero->Soul+(int)(Hero->Mind*0.1)+(int)(Hero->Body*0.05))+1)+lockcount/12)>=Level[go].SealLevel)
+    m=inputint();
+    if ((m*(Hero->Soul+(int)(Hero->Mind*0.1)+(int)(Hero->Body*0.05)))>=Level[go].SealLevel)
         {
         lockcount++;
         Level[go].isSealed=false;
         cout<<"You broke through."<<endl;
         }
-    else {Level[go].SealLevel-=(m*((Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))+1)); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
+    else {Level[go].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
     }
 Hero->isinRoom=go;
 }
@@ -1287,14 +1276,14 @@ mapa[now]=true;
 if (Level[now].isLocked)
     {
     cout<<"but it's locked."<<endl;
-    if (Hero->Mind+(int)(Hero->Soul*0.15)+lockcount/4>=Level[now].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[now].isLocked=false;}
-    else{Level[now].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2)+1+lockcount/4;cout<<"You failed to open the lock, you'll have better luck next time, especially so that you are begining to understand how that one works..."<<endl;
+    if (Hero->Mind+(int)(Hero->Soul*0.15)>=Level[now].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[now].isLocked=false;}
+    else{Level[now].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, you'll have better luck next time, especially so that you are begining to understand how that one works..."<<endl;
     Hero->isinRoom=-1;
     return;}
     }
 if(Level[now].isSealed)
     {
-    cout<<"but you eccountered a magical boundary!"<<endl;
+    cout<<"but you eccountered a magical boundary!";
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
@@ -1430,16 +1419,15 @@ cout<<Hero->Name<< " has fallen..."<<endl;
 delete Enemy;
 ofstream scorelog;
 scorelog.open("Scorelog.txt", ios_base::app);
-scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<" | Obstacles Overcame: "<<lockcount<<endl;
+scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<endl<<" | Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
 cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
-cout<<"retry?[Y/N]"<<endl;
+cout<<"retry?[y/N]"<<endl;
 delete Hero;
 string q;
 getline(cin,q);
-if (q[0]=='n' or q[0]=='N'){return 0;}
-else{main();}
+if (q[0]=='y' or q[0]=='Y'){main();}
 return 0;
 }
 //Armoury explanation: Name(bez Spacji) DMG_baz Body_Mult Soul_mult Mind_mult Body_req Soul_req Mind_req Body_Mult_Upgrade_Difficulty Soul_Mult_Upgrade_Difficulty Mind_Mult_Upgrade_Difficulty
