@@ -355,14 +355,14 @@ bool WALKA()
 {
 //cout<<Enemy->Body<<" "<<Enemy->Soul<<" "<<Enemy->HP<<" "<<Enemy->MaxHP<<endl;
 cout<<"You eccountered  an enemy!"<<endl;
-bool v=true;
+bool v=false;
 while(Enemy->isAlive() and Hero->isAlive())
     {
     int delta;
     bool d=0;
     string a;
     char c;
-    cout<<"Will you atack or defend?"<<endl;
+    cout<<"Will you atack or defend?"<<endl<<"You have "<<Hero->HP<<"HP left)"<<endl;
     getline(cin,a);
     c=a[0];
     switch(c)
@@ -412,6 +412,7 @@ while(Enemy->isAlive() and Hero->isAlive())
         Attack(Enemy,Hero);
         if(d){Hero->Defence-=delta;}
         if(!Hero->isAlive()){v=false;}
+        if(!Enemy->isAlive()){v=true;}
         }
     if(v){
         cout<<"You see as "<<Enemy->Name<<" slowly dissipates"<<endl;
@@ -483,15 +484,15 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
-if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
-int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
+if(LabyrinthFloor==0){Enemy->Name="Training Dummy";}
+int stat=1+ceil(LabyrinthFloor/5)+rollD(floor(LabyrinthFloor/100));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
 Enemy->Soul=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Soul;
 Enemy->Mind=LabyrinthFloor+rollD(stat);
-Enemy->HPmods+=1+rollD(LabyrinthFloor*2)+rollD(3);
-Enemy->MPmods+=rollD(LabyrinthFloor+15);
+Enemy->HPmods=1+rollD(LabyrinthFloor*2)+rollD(3);
+Enemy->MPmods=rollD(LabyrinthFloor+15);
 Enemy->uzbrojenie.bazDMG+=LabyrinthFloor + rollD(floor(LabyrinthFloor/33));
 if(Enemy->Body>Enemy->Soul)
     {
@@ -519,6 +520,8 @@ else if (Enemy->Mind>Enemy->Body)
 else {Enemy->uzbrojenie.BodyDMGmod=LabyrinthFloor/13;Enemy->uzbrojenie.SoulDMGmod=LabyrinthFloor/23;Enemy->uzbrojenie.MindDMGmod=LabyrinthFloor/33;}
 Enemy->CalculateStats();
 Enemy->HP=Enemy->MaxHP;
+Enemy->MP=Enemy->MaxMp;
+Enemy->CalculateStats();
 return WALKA();
 }
 
@@ -1150,8 +1153,16 @@ else if (Level[Hero->isinRoom].Special==4){cout<<"a...n egg? perhaps... made of 
 else {cout << "a rather mundane room, albeit the floor seems to be covered in a thin layer of fog"<<endl;}
 }
 
+bool unexplored;
+
 void Relocate()
 {
+    for(int i=0;i<Level.size() and explored;i++)
+        {
+        if(mapa[i]==false)
+            {
+            explored=false;
+            }
 if(Hero->isinRoom<=-1){cout<<"Currently you aren't in any room, but you know how to get to these rooms: "<<endl;}
 else{cout<<"You are in the room "<<Hero->isinRoom<<" and you know how to get to rooms:"<<endl;}
 for(int i=0,disp=0;i<mapa.size();i++)
