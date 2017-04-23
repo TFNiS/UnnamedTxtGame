@@ -705,7 +705,7 @@ if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a'
         {
         this_thread::sleep_for(chrono::milliseconds(666));
         cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
-        Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/2-2));
+        Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/3-2));
         Hero->Energy=0;
         return;
         }
@@ -1445,7 +1445,7 @@ ofstream scorelog;
 scorelog.open("Scorelog.txt", ios_base::app);
 scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<" | Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
-cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
+cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
 cout<<"retry?[y/N]"<<endl;
 delete Hero;
