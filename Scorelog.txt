@@ -3,3 +3,7 @@ ja: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 2
 Elerdor: Enemies Defeated: 4 | Floor: 1 | Obstacles Overcame: 3
 s: Enemies Defeated: 4 | Floor: 1 | Obstacles Overcame: 3
 Blackbat: Enemies Defeated: 4 | Floor: 1 | Obstacles Overcame: 5
+marian: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
+Drejzer: Enemies Defeated: 30 | Floor: 3 | Obstacles Overcame: 7
+Iwona: Enemies Defeated: 3 | Floor: 1 | Obstacles Overcame: 3
+Mathis: Enemies Defeated: 53 | Floor: 5 | Obstacles Overcame: 20
