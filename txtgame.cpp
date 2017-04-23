@@ -362,6 +362,7 @@ while(Enemy->isAlive() and Hero->isAlive())
     bool d=0;
     string a;
     char c;
+    cout<<"You have "<<Hero->HP<<"/"<<Hero->MaxHP<<"HP left"<<endl;
     cout<<"Will you atack or defend?"<<endl;
     getline(cin,a);
     c=a[0];
@@ -400,7 +401,7 @@ while(Enemy->isAlive() and Hero->isAlive())
                 cout<<"You run for your petty life..."<<endl;
                 v=false;
                 Enemy->HP=0;
-                Enemy->isAlive();
+                return false;
                 break;
                 }
         default:{
@@ -483,7 +484,7 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
-if(LabyrinthFloor==0){Enemy->Name="Training Dummy";}
+if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
 int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
@@ -544,14 +545,14 @@ Level[rooms].hasSecret=min(1,max(0,(-4+rollD(6))));
 Level[rooms].isOccupied=1;
 Level[rooms].isLocked=min(1,max(0,(-5+rollD(6))));
 Level[rooms].isSealed=1;
-Level[rooms].SealLevel=rollD(3)+LabyrinthFloor+0.9*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor))+max(-1,-66+LabyrinthFloor);
-Level[rooms].LockLevel=rollD(3)+LabyrinthFloor+0.9*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+Level[rooms].SealLevel=rollD(3)+LabyrinthFloor+0.95*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor/2)+rollD(max(-1,-66+LabyrinthFloor)));
+Level[rooms].LockLevel=rollD(3)+LabyrinthFloor+0.95*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor/2));
 if (Level[rooms].hasSecret==true)
     {
     Level[rooms].MakeSecret();
     }
     rooms++;
-for (int i=((int)(5+LabyrinthFloor*1.025+rollD(LabyrinthFloor)+max(0,-66+LabyrinthFloor)*rollD(LabyrinthFloor*LabyrinthFloor*0.0125-LabyrinthFloor-44)))%777;rooms<i;rooms++)
+for (int i=((int)(6+LabyrinthFloor*0.75+rollD(LabyrinthFloor)+max(0,-30+LabyrinthFloor)));rooms<i;rooms++)
     {
     Level.push_back(Room());
     mapa.push_back(false);
@@ -559,8 +560,8 @@ for (int i=((int)(5+LabyrinthFloor*1.025+rollD(LabyrinthFloor)+max(0,-66+Labyrin
     Level[rooms].MakeSecret();
     Level[rooms].isSealed=min(1,max(0,(-7+rollD(8))));
     Level[rooms].isLocked=min(1,max(0,(-9+rollD(10))));
-    Level[rooms].SealLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*LabyrinthFloor*rollD(LabyrinthFloor));
-    Level[rooms].LockLevel=rollD(8)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+    Level[rooms].SealLevel=rollD(6)+LabyrinthFloor+(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+    Level[rooms].LockLevel=rollD(4)+LabyrinthFloor+(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
     Level[rooms].Special=-1;
     Level[rooms].MakeSecret();
     }
@@ -1161,7 +1162,7 @@ for(int i=0,disp=0;i<mapa.size();i++)
     if ((disp+1)%10==0)
         {cout<<endl;}
     }
-if(!knows){cout<<"Let me corect that statement:"<<endl<<"YOU HAVE NO IDEA WHERE (if any) ARE ROOMS";return;}
+if(!knows){cout<<"Let me corect that statement:"<<endl<<"YOU HAVE NO IDEA WHERE (if any) ARE ROOMS"<<endl;return;}
 cout<<endl;
 int go;
 go=inputint();
@@ -1170,7 +1171,7 @@ else if (go<0){Hero->isinRoom=-1;cout<<"You left the room."<<endl;}
 else if( go>mapa.size() or mapa[go]==false){cout<<"You can't be sure if such room even exists... so you stay where you are."<<endl;return;}
 else{
 cout<<"You set off..."<<endl;
-cout<<Level[go].isOccupied;
+//cout<<Level[go].isOccupied;
 switch(rollD(20))
     {
     case 13:
@@ -1193,7 +1194,7 @@ cout<<"And you arrive at your destination!"<<endl;
 if (Level[go].isLocked)
     {
     cout<<"but it's locked."<<endl;
-    if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;Level[go].isLocked=false;}
+    if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;if((lockcount+1)%13==0){Hero->Mind++;Hero->CalculateStats();}Level[go].isLocked=false;}
     else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
     }
 if(Level[go].isSealed)
@@ -1202,13 +1203,14 @@ if(Level[go].isSealed)
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
-    if ((m*(Hero->Soul+(int)(Hero->Mind*0.1)+(int)(Hero->Body*0.05)))>=Level[go].SealLevel)
+    if ((m*(Hero->Soul+(int)(Hero->Mind*0.1)+(int)(Hero->Body*0.05))+1)+lockcount/4>=Level[go].SealLevel)
         {
         lockcount++;
+        if((lockcount+1)%13==0){Hero->Mind++;Hero->CalculateStats();}
         Level[go].isSealed=false;
         cout<<"You broke through."<<endl;
         }
-    else {Level[go].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))+1); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
+    else {Level[go].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
     }
 Hero->isinRoom=go;
 }
