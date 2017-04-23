@@ -685,7 +685,7 @@ else{cout<<"Hmm... nothing happens, so you step away."<<endl;}
 void Reforge()
 {
 string choice;
-cout<<"Weapon or Armour?"<<endl;
+cout<<"Weapon or Armour?"<<endl<<"or Status?"<<endl;
 getline(cin,choice);
 if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a' or choice[0]=='A')
     {
@@ -835,6 +835,17 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
         return;
         }
     }
+else if(choice.compare("Status")==0 or choice.compare("status")==0 or choice[0]=='S' or choice[0]=='s')
+        {
+    cout<<"Armour: "<<Hero->Armour<<endl;}
+    cout<<"Energy:"<<Hero->Energy<<endl;
+    cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl;
+    if(Hero->uzbrojenie.bound)
+        {
+        cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<" (·"<<Hero->uzbrojenie.bazProgress<<")"<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<" (·"<<Hero->uzbrojenie.BodyProgress<<")"<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<" (·"<<Hero->uzbrojenie.SoulProgress<<")"<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<" (·"<<Hero->uzbrojenie.MindProgress<<")"<<endl;
+        }
+    else{cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<endl;}
+
 else {cout<<"You changed your mind and step away"<<endl;return;}
 }
 
