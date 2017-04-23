@@ -1445,7 +1445,7 @@ ofstream scorelog;
 scorelog.open("Scorelog.txt", ios_base::app);
 scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<" | Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
-cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
+cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
 cout<<"retry?[y/N]"<<endl;
 delete Hero;
