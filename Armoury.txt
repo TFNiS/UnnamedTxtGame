@@ -9,3 +9,4 @@ Gauntlet 5 2 1 1 2 1 0 3 6 6
 Fork 1 0 0 0 0 0 0 15 10 10
 Scythe 15 5 4 2 5 5 5 8 10 11
 Shortsword 4 2 0 1 2 1 1 10 10 10
+Needle 1 1 3 4 0 1 2 15 5 4
