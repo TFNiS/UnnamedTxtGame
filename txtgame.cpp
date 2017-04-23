@@ -237,7 +237,7 @@ if (Hero->Body>=drop.reqBody and Hero->Soul>=drop.reqSoul && Hero->Mind>=drop.re
         }
     else if(Hero->uzbrojenie.bound)
         {
-        cout<<"As you look at the weapon you found you feel as if your "<<Hero->uzbrojenie.Name<<"was trying to tell you taht it could be just like this one..."<<endl;
+        cout<<"As you look at the weapon you found you feel as if your "<<Hero->uzbrojenie.Name<<"was trying to tell you that it could be just like this one..."<<endl;
         cout<<"Should it Keep it's current appearance or should it Switch?";
         if(rollD(100)>=66){cout<<" you wonder how do those forms Compare against each other..."<<endl<<"You feel as if your weapon wants to warn you about something...";}
         cout<<endl;
@@ -319,14 +319,14 @@ else if (Hero->uzbrojenie.bound)
     Hero->uzbrojenie.Devour(drop);
     cout<<"After "<<drop.Name<<" ceased to exist, your weapon returned to your hand on it's own"<<endl<<"There seem to be some barely noitceable changes... and it seems to feel happy for some reasun..."<<endl;
     }
-else {cout<<"Regretfully, you are incapable of making use of this weapon so you leve it, knowing that it will disappear as soon as you take you eyes away from it"<<endl;}
+else {cout<<"Regretfully, you are incapable of making use of this weapon so you leave it, knowing that it will disappear as soon as you take you eyes away from it"<<endl;}
 }
 
 void Attack(Creature *attacker, Creature *defender)
 {
 cout<<attacker->Name<<" attacks "<<defender->Name<<" and..."<<endl;
 this_thread::sleep_for(chrono::milliseconds(125));
-if(attacker->Attack+rollD(40)>defender->Defence+rollD(40))
+if(attacker->Attack+rollD(20)>defender->Defence+rollD(20))
     {
     this_thread::sleep_for(chrono::milliseconds(455));
     cout<<"... Hits,";
@@ -410,7 +410,7 @@ while(Enemy->isAlive() and Hero->isAlive())
                 break;
                 }
         }
-        Attack(Enemy,Hero);
+        if(Enemy->isAlive()){Attack(Enemy,Hero);}
         if(d){Hero->Defence-=delta;}
         if(!Hero->isAlive()){v=false;}
         }
@@ -453,6 +453,8 @@ while(Enemy->isAlive() and Hero->isAlive())
                             break;
                             }
                         }
+                case 'y':
+                case 'Y':
                 case 't':
                 case 'T':{cout<<"You reach your hand and as you touch it..."<<endl;
                         this_thread::sleep_for(chrono::milliseconds(250));
@@ -491,9 +493,9 @@ stat=stat+LabyrinthFloor-Enemy->Body;
 Enemy->Soul=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Soul;
 Enemy->Mind=LabyrinthFloor+rollD(stat);
-Enemy->HPmods+=1+rollD(LabyrinthFloor*2)+rollD(3);
-Enemy->MPmods+=rollD(LabyrinthFloor+15);
-Enemy->uzbrojenie.bazDMG+=LabyrinthFloor + rollD(floor(LabyrinthFloor/33));
+Enemy->HPmods=1+rollD(LabyrinthFloor*2)+rollD(3);
+Enemy->MPmods=rollD(LabyrinthFloor+15);
+Enemy->uzbrojenie.bazDMG=LabyrinthFloor + rollD(floor(LabyrinthFloor/33));
 if(Enemy->Body>Enemy->Soul)
     {
     if (Enemy->Soul>Enemy->Mind)
@@ -518,6 +520,7 @@ else if (Enemy->Mind>Enemy->Body)
         }
     }
 else {Enemy->uzbrojenie.BodyDMGmod=LabyrinthFloor/13;Enemy->uzbrojenie.SoulDMGmod=LabyrinthFloor/23;Enemy->uzbrojenie.MindDMGmod=LabyrinthFloor/33;}
+if(LabyrinthFloor==0){Enemy->atkmods=-25;Enemy->defmods=-25;Enemy->HPmods--;}
 Enemy->CalculateStats();
 Enemy->HP=Enemy->MaxHP;
 return WALKA();
@@ -582,9 +585,9 @@ string choice;
 getline(cin,choice);
 if(choice.compare("Red")==0 or choice.compare("red")==0)
     {
-    if(Hero->Energy>=Hero->traces+5)
+    if(Hero->Energy>=Hero->traces+3)
         {
-        Hero->Energy-=(5+Hero->traces);
+        Hero->Energy-=(3+Hero->traces);
         Hero->HPmods++;
         Hero->traces++;
         Hero->CalculateStats();
@@ -594,9 +597,9 @@ if(choice.compare("Red")==0 or choice.compare("red")==0)
     }
 else if(choice.compare("Blue")==0 or choice.compare("blue")==0)
     {
-    if(Hero->Energy>=5+Hero->traces)
+    if(Hero->Energy>=3+Hero->traces)
         {
-        Hero->Energy-=(5+Hero->traces);
+        Hero->Energy-=(3+Hero->traces);
         Hero->MPmods++;
         Hero->traces++;
         Hero->CalculateStats();
@@ -606,11 +609,11 @@ else if(choice.compare("Blue")==0 or choice.compare("blue")==0)
     }
 else if(choice.compare("White")==0 or choice.compare("white")==0)
     {
-    if(Hero->Energy>=10+Hero->traces)
+    if(Hero->Energy>=8+Hero->traces)
         {
-        Hero->Energy-=(10+Hero->traces);
+        Hero->Energy-=(8+Hero->traces);
         Hero->atkmods++;
-        Hero->traces+=10;
+        Hero->traces+=5;
         Hero->CalculateStats();
         cout<<"You have a feeling that you will hit your targets more often"<<endl;
         }
@@ -618,11 +621,11 @@ else if(choice.compare("White")==0 or choice.compare("white")==0)
     }
 else if(choice.compare("Black")==0 or choice.compare("black")==0)
     {
-    if(Hero->Energy>=10+Hero->traces)
+    if(Hero->Energy>=8+Hero->traces)
         {
-        Hero->Energy-=(10+Hero->traces);
+        Hero->Energy-=(8+Hero->traces);
         Hero->defmods++;
-        Hero->traces+=10;
+        Hero->traces+=5;
         Hero->CalculateStats();
         cout<<"You have a feeling that you won't get hit as much from now on"<<endl;
         }
@@ -630,11 +633,11 @@ else if(choice.compare("Black")==0 or choice.compare("black")==0)
     }
 else if(choice.compare("Silver")==0 or choice.compare("silver")==0)
     {
-    if(Hero->Energy>=15+Hero->traces)
+    if(Hero->Energy>=13+Hero->traces)
         {
-        Hero->Energy-=(15+Hero->traces);
+        Hero->Energy-=(13+Hero->traces);
         Hero->DMGmods++;
-        Hero->traces+=15;
+        Hero->traces+=8;
         Hero->CalculateStats();
         cout<<"You have a feeling that you will hit your targets harder"<<endl;
         }
@@ -642,11 +645,11 @@ else if(choice.compare("Silver")==0 or choice.compare("silver")==0)
     }
 else if(choice.compare("Green")==0 or choice.compare("green")==0)
     {
-    if(Hero->Energy>=25+Hero->traces)
+    if(Hero->Energy>=20+Hero->traces)
         {
-        Hero->Energy-=(25+Hero->traces);
+        Hero->Energy-=(20+Hero->traces);
         Hero->Mind++;
-        Hero->traces+=30+LabyrinthFloor/2;
+        Hero->traces+=13+LabyrinthFloor/2;
         Hero->CalculateStats();
         cout<<"You feel as if you mind cleared up..."<<endl;
         }
@@ -654,11 +657,11 @@ else if(choice.compare("Green")==0 or choice.compare("green")==0)
     }
 else if(choice.compare("Magenta")==0 or choice.compare("magenta")==0)
     {
-    if(Hero->Energy>=25+Hero->traces)
+    if(Hero->Energy>=20+Hero->traces)
         {
-        Hero->Energy-=(25+Hero->traces);
+        Hero->Energy-=(20+Hero->traces);
         Hero->Body++;
-        Hero->traces+=30+LabyrinthFloor/2;
+        Hero->traces+=13+LabyrinthFloor/2;
         Hero->CalculateStats();
         cout<<"You feel as if your body became better overall"<<endl;
         }
@@ -666,11 +669,11 @@ else if(choice.compare("Magenta")==0 or choice.compare("magenta")==0)
     }
 else if(choice.compare("Cyan")==0 or choice.compare("cyan")==0)
     {
-    if(Hero->Energy>=25+Hero->traces)
+    if(Hero->Energy>=20+Hero->traces)
         {
-        Hero->Energy-=(25+Hero->traces);
+        Hero->Energy-=(20+Hero->traces);
         Hero->Mind++;
-        Hero->traces+=25;
+        Hero->traces+=13;
         Hero->CalculateStats();
         cout<<"You feel a mysterious force inside you..."<<endl;
         }
@@ -694,6 +697,7 @@ if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a'
         {
         this_thread::sleep_for(chrono::milliseconds(666));
         cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
+        Hero->Armour+=quota;
         Hero->Energy-=quota*15-rollD(floor(quota/3-2));
         return;
         }
@@ -1090,15 +1094,15 @@ else if (Level[Hero->isinRoom].hasSecret)
                             cout<<"You attack ";
                             switch(rollD(9))
                                 {
-                                case 1:Hero->uzbrojenie.bazProgress+=1;break;
-                                case 2:Hero->uzbrojenie.SoulProgress+=1;break;
+                                case 1:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/15);break;
+                                case 2:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/15);break;
                                 case 3:
-                                case 4:Hero->uzbrojenie.bazProgress+=1;break;
-                                case 5:Hero->uzbrojenie.SoulProgress+=1;break;
-                                case 6:Hero->uzbrojenie.bazProgress+=2;break;
-                                case 7:Hero->uzbrojenie.BodyProgress+=1;break;
-                                case 9:Hero->Energy++;break;
-                                default: Hero->uzbrojenie.bazProgress++;break;
+                                case 4:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/15);break;
+                                case 5:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/15);break;
+                                case 6:Hero->uzbrojenie.bazProgress+=2+rollD(LabyrinthFloor/15);break;
+                                case 7:Hero->uzbrojenie.BodyProgress+=1+rollD(LabyrinthFloor/15);break;
+                                case 9:Hero->Energy+=1+rollD(LabyrinthFloor/15);break;
+                                default: Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/15);break;
                                 }
                             Level[Hero->isinRoom].hasSecret=false;
                             cout<<"and see as the blob gets absorbed into your weapon"<<endl;
@@ -1107,14 +1111,14 @@ else if (Level[Hero->isinRoom].hasSecret)
                             }
                         }
                 case 't':
-                case 'T':{cout<<"You reach your hand and touch it..."<<endl;
+                case 'T':{cout<<"You reach out your hand and touch the target..."<<endl;
                         this_thread::sleep_for(chrono::milliseconds(250));
                         switch(rollD(20))
                             {
                             case 1:
                             case 3:
                             case 5:
-                            case 7:{Hero->Energy+=3+2*rollD(LabyrinthFloor/1.5);break;}
+                            case 7:{Hero->Energy+=5+2*rollD(LabyrinthFloor*1.25+1);break;}
                             case 6:{Hero->HPmods++;break;}
                             case 4:{Hero->MPmods++;break;}
                             case 2:{Hero->Body++;break;}
@@ -1124,7 +1128,7 @@ else if (Level[Hero->isinRoom].hasSecret)
                             default: {Hero->Energy+=2*rollD(LabyrinthFloor/1.375);break;}
                             }
                         Level[Hero->isinRoom].hasSecret=false;
-                        cout<<"It sinks into you... but you don't feel anythig wrong."<<endl;
+                        cout<<"it sinks into you... but you don't feel anythig wrong."<<endl;
                         break;
                         }
                 default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));
@@ -1178,7 +1182,7 @@ switch(rollD(20))
     case 1:
     case 2:
     case 6:
-    case 0:{Spawn();break;}
+    case 0:{if(Spawn() and Hero->isAlive()){break;} else if(!Hero->isAlive()){cout<<"You died";return;}}
     case 18:{cout<<"You found some refreshments along the way..."<<endl;
         Hero->HP++;
         Hero->MP++;
@@ -1189,13 +1193,13 @@ switch(rollD(20))
             }
     default: break;
     }
-cout<<endl<<endl<<go<<endl<<endl;
+//cout<<endl<<endl<<go<<endl<<endl;
 cout<<"And you arrive at your destination!"<<endl;
 if (Level[go].isLocked)
     {
     cout<<"but it's locked."<<endl;
     if (1+Hero->Mind+(int)(Hero->Soul*0.75)>=Level[go].LockLevel){this_thread::sleep_for(chrono::milliseconds(600));cout<<"After a while, you break open the lock."<<endl;lockcount++;if((lockcount+1)%13==0){Hero->Mind++;Hero->CalculateStats();}Level[go].isLocked=false;}
-    else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2);cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
+    else{Level[go].LockLevel-=2*rollD((Hero->Mind+(int)(Hero->Soul*0.1))/2)+1;cout<<"You failed to open the lock, but you almost figured it out!"<<endl;Hero->isinRoom=-1;return;}
     }
 if(Level[go].isSealed)
     {
@@ -1392,6 +1396,13 @@ Hero->MPmods=3+rollD(5);
 Hero->Body=1;
 Hero->Soul=1;
 Hero->Mind=1;
+switch(rollD(3))
+    {
+    case 1:{Hero->Body++;break;}
+    case 2:{Hero->Soul++;break;}
+    case 3:{Hero->Mind++;break;}
+    default:{Hero->Energy+=30;break;}
+    }
 Hero->uzbrojenie.Name="fist";
 Hero->uzbrojenie.bazDMG=1;
 Hero->uzbrojenie.BodyDMGmod=0;
