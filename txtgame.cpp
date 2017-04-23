@@ -317,7 +317,7 @@ else if (Hero->uzbrojenie.bound)
     cout<<"You feel it would be a pity to leave this "<<drop.Name<<" here, but, unfortunately you can't find any use for it..."<<endl;
     cout<<"Your "<<Hero->uzbrojenie.Name<<" suddenly jumps out of your hand and strikes the "<<drop.Name<<"!"<<endl;
     Hero->uzbrojenie.Devour(drop);
-    cout<<"After "<<drop.Name<<" ceased to exist, your weapon returned to your hand on it's own"<<endl<<"There seem to be some barely noitceable changes... and it seems to feel happy for some reasun..."<<endl;
+    cout<<"After "<<drop.Name<<" ceased to exist, your weapon returned to your hand on it's own"<<endl<<"There seem to be some barely noitceable changes... and it seems to feel happy for some reason..."<<endl;
     }
 else {cout<<"Regretfully, you are incapable of making use of this weapon so you leave it, knowing that it will disappear as soon as you take you eyes away from it"<<endl;}
 }
@@ -470,8 +470,8 @@ while(Enemy->isAlive() and Hero->isAlive())
                             case 11:Hero->Mind++;break;
                             case 12:Hero->Soul++;break;
                             default:Hero->Energy+=3+rollD(LabyrinthFloor/1.49);break;
-
                             }
+                        cout<<"it 'sinks' into your hand"<<endl;break;
                         }
                 default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));break;}
                 }
@@ -1432,7 +1432,7 @@ cout<<Hero->Name<< " has fallen..."<<endl;
 delete Enemy;
 ofstream scorelog;
 scorelog.open("Scorelog.txt", ios_base::app);
-scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<endl<<" | Obstacles Overcame: "<<lockcount<<endl;
+scorelog<<Hero->Name<<": Enemies Defeated: "<<killcount<<" | Floor: "<<LabyrinthFloor<<" | Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
 cout<<Hero->Name<<":"<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;
 cout<<"---------------------------------------------------------------------------------"<<endl;
