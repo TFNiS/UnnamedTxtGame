@@ -363,7 +363,7 @@ while(Enemy->isAlive() and Hero->isAlive())
     string a;
     char c;
     cout<<"You have "<<Hero->HP<<"/"<<Hero->MaxHP<<"HP left"<<endl;
-    cout<<"Will you atack or defend?"<<endl;
+    cout<<"Will you attack or defend?"<<endl;
     getline(cin,a);
     c=a[0];
     switch(c)
@@ -486,7 +486,7 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
-if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
+if(LabyrinthFloor==0){Enemy->Name="Training Dummy";}
 int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
@@ -705,7 +705,7 @@ if (choice.compare("Armour")==0 or choice.compare("armour")==0 or choice[0]=='a'
         {
         this_thread::sleep_for(chrono::milliseconds(666));
         cout<<"After a while you step away collecting the armour you... manifested into existence?"<<endl;
-        Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/3-2));
+        Hero->MP-=quota*15-Hero->Energy-rollD(floor(quota/2-2));
         Hero->Energy=0;
         return;
         }
