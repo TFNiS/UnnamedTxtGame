@@ -837,7 +837,7 @@ else if(choice.compare("Weapon")==0 or choice.compare("weapon")==0 or choice.at(
     }
 else if(choice.compare("Status")==0 or choice.compare("status")==0 or choice[0]=='S' or choice[0]=='s')
         {
-    cout<<"Armour: "<<Hero->Armour<<endl;}
+    cout<<"Armour: "<<Hero->Armour<<endl;
     cout<<"Energy:"<<Hero->Energy<<endl;
     cout<<"Weapon: "<<Hero->uzbrojenie.Name<<endl;
     if(Hero->uzbrojenie.bound)
@@ -845,7 +845,7 @@ else if(choice.compare("Status")==0 or choice.compare("status")==0 or choice[0]=
         cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<" (·"<<Hero->uzbrojenie.bazProgress<<")"<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<" (·"<<Hero->uzbrojenie.BodyProgress<<")"<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<" (·"<<Hero->uzbrojenie.SoulProgress<<")"<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<" (·"<<Hero->uzbrojenie.MindProgress<<")"<<endl;
         }
     else{cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<endl;}
-
+    }
 else {cout<<"You changed your mind and step away"<<endl;return;}
 }
 
