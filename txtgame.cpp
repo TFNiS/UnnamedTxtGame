@@ -483,7 +483,7 @@ while(Enemy->isAlive() and Hero->isAlive())
 bool Spawn()
 {
 Enemy->Name="Spectre";
-if(LabyrinthFloor==0){Enemy->Name=="Training Dummy";}
+if(LabyrinthFloor==0){Enemy->Name="Training Dummy";}
 int stat=1+LabyrinthFloor+rollD(floor(LabyrinthFloor/3));
 Enemy->Body=LabyrinthFloor+rollD(stat);
 stat=stat+LabyrinthFloor-Enemy->Body;
@@ -544,8 +544,8 @@ Level[rooms].hasSecret=min(1,max(0,(-4+rollD(6))));
 Level[rooms].isOccupied=1;
 Level[rooms].isLocked=min(1,max(0,(-5+rollD(6))));
 Level[rooms].isSealed=1;
-Level[rooms].SealLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor)*rollD(LabyrinthFloor))+max(-1,66+LabyrinthFloor);
-Level[rooms].LockLevel=rollD(6)+LabyrinthFloor+1.25*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
+Level[rooms].SealLevel=rollD(3)+LabyrinthFloor+0.9*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor))+max(-1,-66+LabyrinthFloor);
+Level[rooms].LockLevel=rollD(3)+LabyrinthFloor+0.9*(rollD(LabyrinthFloor)+max(0,-100+LabyrinthFloor));
 if (Level[rooms].hasSecret==true)
     {
     Level[rooms].MakeSecret();
@@ -1161,7 +1161,7 @@ for(int i=0,disp=0;i<mapa.size();i++)
     if ((disp+1)%10==0)
         {cout<<endl;}
     }
-if(!knows){cout<<"Let me corect that statement":<<endl<<"YOU HAVE NO IDEA WHERE (if any) ARE ROOMS";}
+if(!knows){cout<<"Let me corect that statement:"<<endl<<"YOU HAVE NO IDEA WHERE (if any) ARE ROOMS";return;}
 cout<<endl;
 int go;
 go=inputint();
@@ -1198,7 +1198,7 @@ if (Level[go].isLocked)
     }
 if(Level[go].isSealed)
     {
-    cout<<"You eccountered a magical boundary!";
+    cout<<"You eccountered a magical boundary!"<<endl;
     int m;
     cout<<"How much MP you want to use to break this barrier?"<<endl;
     m=inputint();
@@ -1208,7 +1208,7 @@ if(Level[go].isSealed)
         Level[go].isSealed=false;
         cout<<"You broke through."<<endl;
         }
-    else {Level[go].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
+    else {Level[go].SealLevel-=(m*(Hero->Soul+(int)(Hero->Mind*0.095)+(int)(Hero->Body*0.045))+1); cout<<"The barrier seems weakened..."<<endl;Hero->isinRoom=-1;return;}
     }
 Hero->isinRoom=go;
 }
