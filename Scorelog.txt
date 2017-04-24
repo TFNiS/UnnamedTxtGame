@@ -7,3 +7,7 @@ marian: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
 Drejzer: Enemies Defeated: 30 | Floor: 3 | Obstacles Overcame: 7
 Iwona: Enemies Defeated: 3 | Floor: 1 | Obstacles Overcame: 3
 Mathis: Enemies Defeated: 53 | Floor: 5 | Obstacles Overcame: 20
+yh lol: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
+serkoks1979: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 1
+rw: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
+kolo: Enemies Defeated: 0 | Floor: 0 | Obstacles Overcame: 0
