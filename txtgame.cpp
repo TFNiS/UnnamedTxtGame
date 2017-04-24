@@ -439,15 +439,15 @@ while(Enemy->isAlive() and Hero->isAlive())
                             {
                             switch(rollD(9))
                                 {
-                                case 1:Hero->uzbrojenie.bazProgress+=1;break;
-                                case 2:Hero->uzbrojenie.SoulProgress+=1;break;
+                                case 1:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
+                                case 2:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/2);break;
                                 case 3:
-                                case 4:Hero->uzbrojenie.bazProgress+=1;break;
-                                case 5:Hero->uzbrojenie.SoulProgress+=1;break;
-                                case 6:Hero->uzbrojenie.bazProgress+=2;break;
-                                case 7:Hero->uzbrojenie.BodyProgress+=1;break;
-                                case 9:Hero->Energy++;break;
-                                default: Hero->uzbrojenie.bazProgress++;break;
+                                case 4:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
+                                case 5:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/2);break;
+                                case 6:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2)+1;break;
+                                case 7:Hero->uzbrojenie.BodyProgress+=1+rollD(LabyrinthFloor/2);break;
+                                case 9:Hero->Energy+=1+rollD(LabyrinthFloor/2);break;
+                                default: Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
                              }
                             cout<<"and see as the blob gets absorbed into your weapon"<<endl;
                             break;
@@ -473,7 +473,25 @@ while(Enemy->isAlive() and Hero->isAlive())
                             }
                         cout<<"it 'sinks' into your hand"<<endl;break;
                         }
-                default: {cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));break;}
+                default: {
+                if (Hero->uzbrojenie.bound)
+                        {
+                    switch(rollD(9))
+                        {
+                        case 1:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
+                        case 2:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/2);break;
+                        case 3:
+                        case 4:Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
+                        case 5:Hero->uzbrojenie.SoulProgress+=1+rollD(LabyrinthFloor/2);break;
+                        case 6:Hero->uzbrojenie.bazProgress+=2+rollD(LabyrinthFloor/2);break;
+                        case 7:Hero->uzbrojenie.BodyProgress+=1+rollD(LabyrinthFloor/2);break;
+                        case 9:Hero->Energy+=1+rollD(LabyrinthFloor/2);break;
+                        default: Hero->uzbrojenie.bazProgress+=1+rollD(LabyrinthFloor/2);break;
+                     }
+                    cout<<"The blob gets absorbed into your weapon"<<endl;
+                        }
+                else{cout<<"You observe as it dissipates..."<<endl; this_thread::sleep_for(chrono::milliseconds(875));break;}
+                    }
                 }
             }
         if(rollD(10+rollD(9+rollD(8))+rollD(11))==11){LootWpn();}
@@ -1352,7 +1370,7 @@ switch ((int)a)
                 cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<endl;
                 cout<<"Damage Output: "<<Hero->DMG<<endl;
                 }
-            else{cout<<"DMG:"<<Hero->uzbrojenie.bazDMG<<endl<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;}
+            else{cout<<"DMG:"<<Hero->uzbrojenie.bazDMG<<endl<<"Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;}
             break;
             }
     case 'A':
