@@ -1352,7 +1352,7 @@ switch ((int)a)
                 cout<<"§Foundation: "<<Hero->uzbrojenie.bazDMG<<endl<<"§Sharpness: "<<Hero->uzbrojenie.BodyDMGmod<<endl<<"§Aura: "<<Hero->uzbrojenie.SoulDMGmod<<endl<<"§Precision: "<<Hero->uzbrojenie.MindDMGmod<<endl;
                 cout<<"Damage Output: "<<Hero->DMG<<endl;
                 }
-            else{cout<<"DMG:"<<Hero->uzbrojenie.bazDMG<<endl;}
+            else{cout<<"DMG:"<<Hero->uzbrojenie.bazDMG<<endl<<endl<<" Enemies Defeated: "<<killcount<<endl<<"Floor: "<<LabyrinthFloor<<endl<<"Obstacles Overcame: "<<lockcount<<endl;}
             break;
             }
     case 'A':
