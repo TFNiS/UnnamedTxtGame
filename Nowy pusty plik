@@ -1,0 +1,15 @@
+s -> przeszukuje okolice 
+e -> szuka nowych pokoi
+i -> interakcja z obiektem w pokoju
+d -> uśmiercenie postaci (Potwierdzić przez wpisanie YES)
+g -> przejście do wcześniej odwiedzonego pokoju
+c -> status postaci
+
+Podczsas WALKI:
+a -> atak
+d -> obrona
+f -> uczieczka
+
+Czytanie ze zrozumieniem jest wskazane;
+przejście do kolejnego poziomu jest ZAWSZE W POKOJU 0;
+
